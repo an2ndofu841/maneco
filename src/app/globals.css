@@ -2,7 +2,7 @@
 
 :root {
   --brand: #2563eb;
-  --brand-2: #0ea5e9;
+  --brand-strong: #1d4ed8;
   --ink: #0f172a;
   --muted: #64748b;
   --surface: #ffffff;
@@ -23,7 +23,7 @@ html, body {
 }
 
 body {
-  background: linear-gradient(180deg, #f8fbff 0%, #f1f6ff 100%);
+  background: linear-gradient(180deg, #f8fbff 0%, #f3f7ff 100%);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
 }
@@ -49,16 +49,16 @@ body {
 
 /* グラスモーフィズム */
 .glass {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(148, 163, 184, 0.22);
 }
 
 .glass-gold {
   background: rgba(37, 99, 235, 0.08);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(37, 99, 235, 0.2);
 }
 
@@ -68,7 +68,7 @@ body {
 }
 
 .gradient-gold-text {
-  background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+  background: linear-gradient(135deg, #1d4ed8, #0284c7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -76,17 +76,25 @@ body {
 
 /* ネオングロウ */
 .glow-gold {
-  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.22);
 }
 
 .glow-gold-sm {
-  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.2);
 }
 
 /* ダークカード */
 .dark-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 /* アニメーション */
