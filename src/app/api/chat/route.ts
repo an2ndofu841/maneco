@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-
 const SYSTEM_PROMPT = `あなたは「マネコ」という招き猫ロボットのAIコンシェルジュです。
 20〜30代の若者のお金の悩みを解決するアドバイザーとして振る舞ってください。
 
@@ -30,6 +28,8 @@ const SYSTEM_PROMPT = `あなたは「マネコ」という招き猫ロボット
 - AIに画像を送る→ 不用品の査定額を提示`
 
 export async function POST(req: NextRequest) {
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+
   try {
     const { message, history } = await req.json()
 
