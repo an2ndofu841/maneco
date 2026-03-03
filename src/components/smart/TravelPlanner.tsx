@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Loader2, MapPin, DollarSign, Calendar, Sparkles, ChevronDown, ChevronUp, ExternalLink, ArrowRight, Plane, Train, Bus, AlertTriangle, Star } from 'lucide-react'
+import { Loader2, MapPin, DollarSign, Calendar, Sparkles, ChevronDown, ChevronUp, ExternalLink, ArrowRight, Plane, Train, Bus, AlertTriangle, Star, CheckCircle, PlusCircle } from 'lucide-react'
 
 // 型定義を拡張
 interface TravelPlan {
@@ -11,10 +11,8 @@ interface TravelPlan {
   budget: number
   total_estimated_cost: number
   transportation: {
-    type: string
-    cost: number
-    details: string
-    booking_url: string
+    outbound: { type: string; time: string; cost: number; detail: string; booking_url: string }
+    inbound: { type: string; time: string; cost: number; detail: string; booking_url: string }
   }
   scores: {
     comfort: number
@@ -23,9 +21,10 @@ interface TravelPlan {
     overall: number
   }
   compromise_points: { title: string; description: string }[]
+  upgrade_options: { title: string; cost_diff: number; description: string }[]
   itinerary: {
     day: number
-    activities: { time: string; activity: string; cost: number; tip: string }[]
+    activities: { time: string; type: string; activity: string; method?: string; cost: number; tip?: string; booking_url?: string }[]
     accommodation: { name: string; cost: number; booking_url: string }
   }[]
   saving_tips: string[]
@@ -96,7 +95,7 @@ export default function TravelPlanner() {
             </div>
             <h2 className="text-2xl md:text-3xl font-black mb-1 leading-tight">{plan.plan_title}</h2>
             <p className="text-indigo-200 text-sm font-medium mb-6 flex items-center gap-2">
-              <MapPin className="w-4 h-4" /> {plan.departure} → {plan.destination}
+              <MapPin className="w-4 h-4" /> {plan.departure} ⇄ {plan.destination}
             </p>
 
             <div className="grid grid-cols-2 gap-4 mb-6">
@@ -144,32 +143,62 @@ export default function TravelPlanner() {
           </div>
         )}
 
-        {/* 移動手段 */}
-        <div className="bento-card p-5 rounded-3xl border-l-4 border-l-indigo-500">
-          <div className="flex items-start justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600">
-                {plan.transportation.type.includes('飛行機') || plan.transportation.type.includes('LCC') ? <Plane className="w-4 h-4" /> :
-                 plan.transportation.type.includes('バス') ? <Bus className="w-4 h-4" /> : <Train className="w-4 h-4" />}
+        {/* 課金オプション（アップグレード） */}
+        {plan.upgrade_options && plan.upgrade_options.length > 0 && (
+          <div className="bento-card p-5 rounded-3xl bg-indigo-50 border-indigo-200 border-l-4 border-l-indigo-500">
+            <div className="flex items-start gap-3">
+              <PlusCircle className="w-6 h-6 text-indigo-500 flex-shrink-0 mt-0.5" />
+              <div className="w-full">
+                <h3 className="font-bold text-indigo-800 text-sm mb-2">ちょっと贅沢！課金オプション</h3>
+                <ul className="space-y-2">
+                  {plan.upgrade_options.map((option, i) => (
+                    <li key={i} className="flex items-center justify-between text-indigo-700 text-xs font-medium bg-white/50 p-2 rounded-lg">
+                      <div>
+                        <span className="font-bold block mb-0.5">✨ {option.title}</span>
+                        {option.description}
+                      </div>
+                      <span className="bg-indigo-100 text-indigo-600 px-2 py-1 rounded-md font-bold text-[10px] whitespace-nowrap ml-2">
+                        +{option.cost_diff.toLocaleString()}円
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div>
-                <p className="text-xs font-bold text-slate-500">往復移動手段</p>
-                <p className="font-bold text-slate-900 text-sm">{plan.transportation.type}</p>
-              </div>
-            </div>
-            <div className="text-right">
-              <p className="text-indigo-600 font-black text-lg">¥{plan.transportation.cost.toLocaleString()}</p>
             </div>
           </div>
-          <p className="text-slate-600 text-xs mb-3 bg-slate-50 p-2 rounded-lg">{plan.transportation.details}</p>
-          <a
-            href={plan.transportation.booking_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition-colors"
-          >
-            チケットを検索・予約 <ExternalLink className="w-3 h-3" />
-          </a>
+        )}
+
+        {/* 往復移動手段 */}
+        <div className="bento-card p-5 rounded-3xl border-l-4 border-l-blue-500">
+          <h3 className="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+            <Plane className="w-4 h-4 text-blue-500" /> 往復の移動プラン
+          </h3>
+          
+          {/* 往路 */}
+          <div className="mb-4 pb-4 border-b border-slate-100">
+            <div className="flex justify-between items-start mb-1">
+              <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">行き</span>
+              <span className="text-blue-600 font-bold text-sm">¥{plan.transportation.outbound.cost.toLocaleString()}</span>
+            </div>
+            <p className="font-bold text-slate-900 text-sm mb-1">{plan.transportation.outbound.type}</p>
+            <p className="text-xs text-slate-500 mb-2">{plan.transportation.outbound.detail} ({plan.transportation.outbound.time})</p>
+            <a href={plan.transportation.outbound.booking_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold text-blue-500 flex items-center gap-1 hover:underline">
+              チケットを検索 <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+
+          {/* 復路 */}
+          <div>
+            <div className="flex justify-between items-start mb-1">
+              <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">帰り</span>
+              <span className="text-blue-600 font-bold text-sm">¥{plan.transportation.inbound.cost.toLocaleString()}</span>
+            </div>
+            <p className="font-bold text-slate-900 text-sm mb-1">{plan.transportation.inbound.type}</p>
+            <p className="text-xs text-slate-500 mb-2">{plan.transportation.inbound.detail} ({plan.transportation.inbound.time})</p>
+            <a href={plan.transportation.inbound.booking_url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold text-blue-500 flex items-center gap-1 hover:underline">
+              チケットを検索 <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
         </div>
 
         {/* 日程詳細 */}
@@ -202,16 +231,37 @@ export default function TravelPlanner() {
                         <div className="absolute left-[19px] top-8 bottom-[-20px] w-0.5 bg-slate-200 last:hidden" />
                         <div className="w-10 flex-shrink-0 flex flex-col items-center">
                           <p className="text-slate-400 text-[10px] font-bold mb-1">{activity.time}</p>
-                          <div className="w-2 h-2 rounded-full bg-indigo-300 ring-4 ring-white" />
+                          <div className={`w-2 h-2 rounded-full ring-4 ring-white ${
+                            activity.type === 'move' ? 'bg-slate-400' : 
+                            activity.type === 'meal' ? 'bg-orange-400' : 'bg-indigo-400'
+                          }`} />
                         </div>
                         <div className="flex-1 bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
-                          <p className="text-slate-900 text-sm font-bold mb-1">{activity.activity}</p>
-                          <div className="flex items-center gap-3 flex-wrap">
-                            <span className="text-indigo-600 text-[10px] font-bold bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">¥{activity.cost?.toLocaleString()}</span>
-                            <span className="text-slate-500 text-[10px] flex items-center gap-1">
-                              <Sparkles className="w-3 h-3 text-amber-400" /> {activity.tip}
-                            </span>
+                          <div className="flex justify-between items-start mb-1">
+                            <p className="text-slate-900 text-sm font-bold">{activity.activity}</p>
+                            {activity.type === 'move' && <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded">移動</span>}
                           </div>
+                          
+                          {activity.method && (
+                            <p className="text-xs text-slate-500 mb-1 flex items-center gap-1">
+                              <Bus className="w-3 h-3" /> {activity.method}
+                            </p>
+                          )}
+
+                          <div className="flex items-center gap-3 flex-wrap mt-2">
+                            <span className="text-indigo-600 text-[10px] font-bold bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">¥{activity.cost?.toLocaleString()}</span>
+                            {activity.tip && (
+                              <span className="text-slate-500 text-[10px] flex items-center gap-1">
+                                <Sparkles className="w-3 h-3 text-amber-400" /> {activity.tip}
+                              </span>
+                            )}
+                          </div>
+
+                          {activity.booking_url && (
+                            <a href={activity.booking_url} target="_blank" rel="noopener noreferrer" className="mt-2 text-[10px] font-bold text-blue-500 flex items-center gap-1 hover:underline">
+                              詳細・予約 <ExternalLink className="w-3 h-3" />
+                            </a>
+                          )}
                         </div>
                       </div>
                     ))}
