@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { User } from '@/types'
-import { LogOut, Edit2, Target, ChevronRight } from 'lucide-react'
+import { LogOut, Edit2, Target, Save, X, User as UserIcon, Briefcase, Calendar } from 'lucide-react'
 
 const AGE_GROUPS = [
   { value: 'teen', label: '10代' }, { value: '20s', label: '20代' },
@@ -36,7 +36,13 @@ export default function ProfilePage() {
     const { data } = await supabase.from('users').select('*').eq('id', authUser.id).single()
     if (data) {
       setUser(data as User)
-      setForm({ nickname: data.nickname ?? '', age_group: data.age_group ?? '', occupation: data.occupation ?? '', goal_title: data.goal_title ?? '', goal_amount: data.goal_amount?.toString() ?? '' })
+      setForm({
+        nickname: data.nickname ?? '',
+        age_group: data.age_group ?? '',
+        occupation: data.occupation ?? '',
+        goal_title: data.goal_title ?? '',
+        goal_amount: data.goal_amount?.toString() ?? ''
+      })
     }
   }
 
@@ -50,7 +56,11 @@ export default function ProfilePage() {
       goal_title: form.goal_title || null,
       goal_amount: form.goal_amount ? parseInt(form.goal_amount) : null,
     }).eq('id', user.id)
-    if (!error) { await loadProfile(); setEditing(false) }
+    
+    if (!error) {
+      await loadProfile()
+      setEditing(false)
+    }
     setSaving(false)
   }
 
@@ -62,8 +72,8 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-transparent flex items-center justify-center">
-        <div className="text-3xl animate-bounce">🐱</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-4xl animate-bounce">🐱</div>
       </div>
     )
   }
@@ -73,171 +83,289 @@ export default function ProfilePage() {
   const occupationLabel = OCCUPATIONS.find((o) => o.value === user.occupation)?.label
 
   return (
-    <div className="min-h-screen bg-transparent">
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-[50%] -translate-x-[50%] w-[300px] h-[200px] bg-amber-500/6 rounded-full blur-[60px]" />
-      </div>
-
-      {/* プロフィールヘッダー */}
-      <div className="relative z-10 mx-auto w-full max-w-4xl px-5 pb-6 pt-16 text-center md:px-0 md:pt-10">
-        <div className="relative inline-block mb-3">
-          <div className="w-20 h-20 rounded-3xl flex items-center justify-center text-4xl mx-auto animate-float"
-            style={{ background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.25)' }}>
-            {emoji}
+    <div className="min-h-screen pb-24 md:pb-12">
+      <div className="app-container pt-8 md:pt-12">
+        
+        {/* ヘッダー */}
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <p className="text-slate-500 text-sm font-medium mb-1">アカウント設定</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">マイページ</h1>
           </div>
-          <div className="absolute -bottom-1 -right-1 gradient-gold text-black text-xs font-black rounded-full w-6 h-6 flex items-center justify-center">
-            {user.character_level}
-          </div>
+          {!editing && (
+            <button
+              onClick={() => setEditing(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-50 text-indigo-600 text-sm font-bold hover:bg-indigo-100 transition-colors"
+            >
+              <Edit2 className="w-4 h-4" />
+              編集する
+            </button>
+          )}
         </div>
-        <h2 className="text-white font-black text-xl">{user.nickname}</h2>
-        <p className="text-white/30 text-xs mt-0.5">{user.email}</p>
-        <div className="flex items-center justify-center gap-2 mt-3">
-          <span className="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
-            {user.total_points.toLocaleString()} pt
-          </span>
-          {ageLabel && <span className="text-xs text-white/30 bg-white/5 border border-white/10 px-3 py-1 rounded-full">{ageLabel}</span>}
-          {occupationLabel && <span className="text-xs text-white/30 bg-white/5 border border-white/10 px-3 py-1 rounded-full">{occupationLabel}</span>}
-        </div>
-      </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-4xl space-y-4 px-4 md:px-0">
-        {!editing ? (
-          <>
-            {/* 実績 */}
-            <div className="grid grid-cols-3 gap-2 md:gap-3">
-              {[
-                { label: '保有pt', value: `${user.total_points.toLocaleString()}`, color: 'text-amber-400' },
-                { label: '節約額', value: `¥${user.total_savings.toLocaleString()}`, color: 'text-emerald-400' },
-                { label: 'キャラLv', value: `Lv.${user.character_level}`, color: 'text-violet-400' },
-              ].map(({ label, value, color }) => (
-                <div key={label} className="rounded-2xl p-3 text-center border border-white/8" style={{ background: '#1a1a24' }}>
-                  <p className={`font-black text-base ${color}`}>{value}</p>
-                  <p className="text-white/30 text-[10px] mt-0.5">{label}</p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* 左カラム：プロフィールカード */}
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bento-card p-6 rounded-[2.5rem] text-center relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-indigo-500 to-blue-500" />
+              
+              <div className="relative z-10 mt-12 mb-4">
+                <div className="w-28 h-28 mx-auto bg-white rounded-3xl shadow-xl flex items-center justify-center text-6xl border-4 border-white">
+                  {emoji}
                 </div>
-              ))}
+                <div className="absolute bottom-0 right-1/2 translate-x-10 translate-y-2 bg-slate-900 text-white text-xs font-black px-2 py-1 rounded-full border-2 border-white">
+                  Lv.{user.character_level}
+                </div>
+              </div>
+
+              <h2 className="text-xl font-bold text-slate-900 mb-1">{user.nickname}</h2>
+              <p className="text-slate-500 text-xs mb-6">{user.email}</p>
+
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                <div className="bg-slate-50 rounded-2xl p-3 border border-slate-100">
+                  <p className="text-slate-400 text-[10px] font-bold mb-1">年代</p>
+                  <p className="text-slate-900 text-sm font-bold">{ageLabel ?? '未設定'}</p>
+                </div>
+                <div className="bg-slate-50 rounded-2xl p-3 border border-slate-100">
+                  <p className="text-slate-400 text-[10px] font-bold mb-1">職業</p>
+                  <p className="text-slate-900 text-sm font-bold">{occupationLabel ?? '未設定'}</p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex justify-between items-center text-sm p-3 rounded-xl bg-amber-50 border border-amber-100">
+                  <span className="text-amber-700 font-bold">保有ポイント</span>
+                  <span className="text-amber-600 font-black">{user.total_points.toLocaleString()} pt</span>
+                </div>
+                <div className="flex justify-between items-center text-sm p-3 rounded-xl bg-emerald-50 border border-emerald-100">
+                  <span className="text-emerald-700 font-bold">累計節約額</span>
+                  <span className="text-emerald-600 font-black">¥{user.total_savings.toLocaleString()}</span>
+                </div>
+              </div>
             </div>
 
-            {/* プロフィール情報 */}
-            <div className="rounded-3xl overflow-hidden border border-white/8" style={{ background: '#1a1a24' }}>
-              <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
-                <p className="text-white/50 text-xs font-medium">プロフィール</p>
-                <button onClick={() => setEditing(true)} className="flex items-center gap-1 text-amber-400 text-xs font-medium">
-                  <Edit2 className="w-3 h-3" />編集
-                </button>
-              </div>
-              {[
-                { label: 'ニックネーム', value: user.nickname },
-                { label: '年代', value: ageLabel ?? '未設定' },
-                { label: '職業', value: occupationLabel ?? '未設定' },
-              ].map(({ label, value }) => (
-                <div key={label} className="flex items-center justify-between px-4 py-3.5 border-b border-white/5 last:border-0">
-                  <span className="text-white/30 text-xs">{label}</span>
-                  <span className="text-white text-sm font-medium">{value}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* 目標設定 */}
-            {user.goal_title && (
-              <div className="rounded-3xl p-4 border border-amber-500/15"
-                style={{ background: 'linear-gradient(135deg, #1a1005 0%, #1e1408 100%)' }}>
-                <div className="flex items-center gap-2 mb-2">
-                  <Target className="w-4 h-4 text-amber-400" />
-                  <p className="text-amber-400 text-xs font-bold">目標設定</p>
-                </div>
-                <p className="text-white font-bold">{user.goal_title}</p>
-                {user.goal_amount && (
-                  <>
-                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mt-2">
-                      <div
-                        className="h-full gradient-gold rounded-full"
-                        style={{ width: `${Math.min(user.total_points / user.goal_amount * 100, 100)}%` }}
-                      />
-                    </div>
-                    <p className="text-white/30 text-xs mt-1">
-                      ¥{user.total_points.toLocaleString()} / ¥{user.goal_amount.toLocaleString()}
-                    </p>
-                  </>
-                )}
-              </div>
-            )}
-
-            {/* ログアウト */}
             <button
               onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-2 border border-red-500/20 text-red-400 py-3.5 rounded-2xl font-medium text-sm bg-red-500/5 hover:bg-red-500/10 transition-all"
+              className="w-full flex items-center justify-center gap-2 border border-red-100 text-red-500 py-4 rounded-2xl font-bold text-sm bg-red-50 hover:bg-red-100 transition-all"
             >
               <LogOut className="w-4 h-4" />
               ログアウト
             </button>
-          </>
-        ) : (
-          <div className="rounded-3xl p-5 border border-white/8 space-y-4" style={{ background: '#1a1a24' }}>
-            <h3 className="font-black text-white text-lg">プロフィール編集</h3>
-
-            {[
-              { label: 'ニックネーム', key: 'nickname', type: 'text', placeholder: 'マネコタロウ' },
-              { label: '目標タイトル', key: 'goal_title', type: 'text', placeholder: '例：沖縄旅行資金' },
-              { label: '目標金額', key: 'goal_amount', type: 'number', placeholder: '50000' },
-            ].map(({ label, key, type, placeholder }) => (
-              <div key={key}>
-                <label className="text-white/40 text-xs mb-1.5 block">{label}</label>
-                <input
-                  type={type}
-                  value={form[key as keyof typeof form]}
-                  onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                  placeholder={placeholder}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-amber-500/40 transition-all"
-                />
-              </div>
-            ))}
-
-            <div>
-              <label className="text-white/40 text-xs mb-2 block">年代</label>
-              <div className="grid grid-cols-3 gap-2">
-                {AGE_GROUPS.map(({ value, label }) => (
-                  <button key={value} onClick={() => setForm({ ...form, age_group: value })}
-                    className={`py-2 rounded-xl text-xs font-medium border transition-all ${
-                      form.age_group === value
-                        ? 'gradient-gold text-black border-transparent'
-                        : 'text-white/30 border-white/10 hover:border-white/20'
-                    }`}>
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="text-white/40 text-xs mb-2 block">職業</label>
-              <div className="grid grid-cols-2 gap-2">
-                {OCCUPATIONS.map(({ value, label }) => (
-                  <button key={value} onClick={() => setForm({ ...form, occupation: value })}
-                    className={`py-2 rounded-xl text-xs font-medium border transition-all ${
-                      form.occupation === value
-                        ? 'gradient-gold text-black border-transparent'
-                        : 'text-white/30 border-white/10 hover:border-white/20'
-                    }`}>
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex gap-3 pt-2">
-              <button onClick={() => setEditing(false)}
-                className="flex-1 border border-white/10 py-3 rounded-2xl text-white/40 text-sm font-medium hover:bg-white/5">
-                キャンセル
-              </button>
-              <button onClick={handleSave} disabled={saving}
-                className="flex-1 gradient-gold text-black font-black py-3 rounded-2xl text-sm disabled:opacity-40 glow-gold-sm">
-                {saving ? '保存中...' : '保存する'}
-              </button>
-            </div>
           </div>
-        )}
 
-        <div className="h-4" />
+          {/* 右カラム：編集フォーム or 詳細情報 */}
+          <div className="lg:col-span-2">
+            {editing ? (
+              <div className="bento-card p-6 md:p-8 rounded-[2.5rem] space-y-6">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-lg font-bold text-slate-900">プロフィール編集</h3>
+                  <button onClick={() => setEditing(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+                    <X className="w-5 h-5 text-slate-400" />
+                  </button>
+                </div>
+
+                <div className="space-y-6">
+                  {/* 基本情報 */}
+                  <div className="space-y-4">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">基本情報</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-slate-700 text-xs font-bold mb-2 block">ニックネーム</label>
+                        <div className="relative">
+                          <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <input
+                            type="text"
+                            value={form.nickname}
+                            onChange={(e) => setForm({ ...form, nickname: e.target.value })}
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                            placeholder="ニックネーム"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 属性 */}
+                  <div className="space-y-4">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">属性（任意）</label>
+                    
+                    <div>
+                      <label className="text-slate-700 text-xs font-bold mb-2 block flex items-center gap-2">
+                        <Calendar className="w-3 h-3" /> 年代
+                      </label>
+                      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                        {AGE_GROUPS.map(({ value, label }) => (
+                          <button
+                            key={value}
+                            onClick={() => setForm({ ...form, age_group: value })}
+                            className={`py-2 rounded-xl text-xs font-bold border transition-all ${
+                              form.age_group === value
+                                ? 'bg-indigo-600 text-white border-indigo-600 shadow-md'
+                                : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-slate-700 text-xs font-bold mb-2 block flex items-center gap-2">
+                        <Briefcase className="w-3 h-3" /> 職業
+                      </label>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {OCCUPATIONS.map(({ value, label }) => (
+                          <button
+                            key={value}
+                            onClick={() => setForm({ ...form, occupation: value })}
+                            className={`py-2 rounded-xl text-xs font-bold border transition-all ${
+                              form.occupation === value
+                                ? 'bg-indigo-600 text-white border-indigo-600 shadow-md'
+                                : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 目標 */}
+                  <div className="space-y-4">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">目標設定</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-slate-700 text-xs font-bold mb-2 block">目標タイトル</label>
+                        <div className="relative">
+                          <Target className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <input
+                            type="text"
+                            value={form.goal_title}
+                            onChange={(e) => setForm({ ...form, goal_title: e.target.value })}
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                            placeholder="例：沖縄旅行"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-slate-700 text-xs font-bold mb-2 block">目標金額</label>
+                        <div className="relative">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">¥</span>
+                          <input
+                            type="number"
+                            value={form.goal_amount}
+                            onChange={(e) => setForm({ ...form, goal_amount: e.target.value })}
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                            placeholder="50000"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 pt-4 border-t border-slate-100">
+                  <button
+                    onClick={() => setEditing(false)}
+                    className="flex-1 py-3.5 rounded-xl text-slate-500 font-bold text-sm hover:bg-slate-50 transition-colors"
+                  >
+                    キャンセル
+                  </button>
+                  <button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className="flex-1 btn-primary py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 disabled:opacity-50"
+                  >
+                    {saving ? '保存中...' : (
+                      <>
+                        <Save className="w-4 h-4" />
+                        保存する
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {/* 目標カード */}
+                <div className="bento-card p-6 rounded-[2.5rem] relative overflow-hidden group">
+                  <div className="absolute right-0 top-0 w-40 h-40 bg-indigo-50 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-110" />
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
+                        <Target className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-indigo-600">現在の目標</p>
+                        <h3 className="text-lg font-bold text-slate-900">{user.goal_title || '目標未設定'}</h3>
+                      </div>
+                    </div>
+
+                    {user.goal_amount ? (
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-end">
+                          <p className="text-3xl font-black text-slate-900 tracking-tight">
+                            {Math.round(Math.min(user.total_points / user.goal_amount * 100, 100))}%
+                            <span className="text-sm font-medium text-slate-400 ml-1">達成</span>
+                          </p>
+                          <p className="text-sm font-bold text-slate-500">
+                            ¥{user.total_points.toLocaleString()} / ¥{user.goal_amount.toLocaleString()}
+                          </p>
+                        </div>
+                        <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full transition-all duration-1000 ease-out"
+                            style={{ width: `${Math.min(user.total_points / user.goal_amount * 100, 100)}%` }}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center py-6 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
+                        <p className="text-slate-400 text-sm font-medium">目標を設定して<br/>モチベーションを上げよう！</p>
+                        <button
+                          onClick={() => setEditing(true)}
+                          className="mt-3 text-indigo-600 text-xs font-bold hover:underline"
+                        >
+                          目標を設定する →
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* 獲得履歴（プレースホルダー） */}
+                <div className="bento-card p-6 rounded-[2.5rem]">
+                  <h3 className="text-lg font-bold text-slate-900 mb-4">最近のアクティビティ</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4 p-3 hover:bg-slate-50 rounded-2xl transition-colors">
+                      <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-xl">
+                        📝
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-slate-900">アンケート回答</p>
+                        <p className="text-xs text-slate-400">2026/03/03</p>
+                      </div>
+                      <span className="text-emerald-600 font-bold text-sm">+500 pt</span>
+                    </div>
+                    <div className="flex items-center gap-4 p-3 hover:bg-slate-50 rounded-2xl transition-colors">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-xl">
+                        ✈️
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-slate-900">旅行プラン作成</p>
+                        <p className="text-xs text-slate-400">2026/03/02</p>
+                      </div>
+                      <span className="text-blue-600 font-bold text-sm">完了</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   )
