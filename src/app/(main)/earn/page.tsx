@@ -74,7 +74,7 @@ export default function EarnPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0f0f14] flex items-center justify-center">
+      <div className="min-h-screen bg-transparent flex items-center justify-center">
         <div className="text-center">
           <div className="text-4xl animate-bounce mb-2">💸</div>
           <p className="text-white/30 text-sm">案件を読み込み中...</p>
@@ -84,7 +84,7 @@ export default function EarnPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0f14]">
+    <div className="min-h-screen bg-transparent">
       {/* 背景 */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-emerald-500/6 rounded-full blur-[80px]" />

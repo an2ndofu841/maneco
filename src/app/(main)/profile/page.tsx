@@ -62,7 +62,7 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-[#0f0f14] flex items-center justify-center">
+      <div className="min-h-screen bg-transparent flex items-center justify-center">
         <div className="text-3xl animate-bounce">🐱</div>
       </div>
     )
@@ -73,7 +73,7 @@ export default function ProfilePage() {
   const occupationLabel = OCCUPATIONS.find((o) => o.value === user.occupation)?.label
 
   return (
-    <div className="min-h-screen bg-[#0f0f14]">
+    <div className="min-h-screen bg-transparent">
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 left-[50%] -translate-x-[50%] w-[300px] h-[200px] bg-amber-500/6 rounded-full blur-[60px]" />
       </div>

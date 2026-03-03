@@ -26,18 +26,18 @@ export default function BottomNav() {
                 href={href}
                 className={`flex-1 flex flex-col items-center py-2 gap-0.5 rounded-xl transition-all ${
                   isActive
-                    ? 'bg-amber-500/15'
-                    : 'hover:bg-white/5'
+                    ? 'bg-blue-50'
+                    : 'hover:bg-slate-50'
                 }`}
               >
                 <Icon
                   className={`w-5 h-5 transition-colors ${
-                    isActive ? 'text-amber-400' : 'text-white/30'
+                    isActive ? 'text-blue-600' : 'text-slate-400'
                   }`}
                   strokeWidth={isActive ? 2.5 : 1.5}
                 />
                 <span className={`text-[10px] font-medium transition-colors ${
-                  isActive ? 'text-amber-400' : 'text-white/30'
+                  isActive ? 'text-blue-600' : 'text-slate-500'
                 }`}>
                   {label}
                 </span>

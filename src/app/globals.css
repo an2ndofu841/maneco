@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --gold: #f59e0b;
-  --gold-light: #fde68a;
-  --gold-dark: #d97706;
-  --dark: #0f0f14;
-  --dark-card: #1a1a24;
-  --dark-border: #2a2a38;
+  --brand: #2563eb;
+  --brand-2: #0ea5e9;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --surface: #ffffff;
+  --surface-soft: #f8fafc;
+  --border: #e2e8f0;
 }
 
 * {
@@ -22,8 +23,8 @@ html, body {
 }
 
 body {
-  background: #0f0f14;
-  color: #f0f0f5;
+  background: linear-gradient(180deg, #f8fbff 0%, #f1f6ff 100%);
+  color: var(--ink);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -48,26 +49,26 @@ body {
 
 /* グラスモーフィズム */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .glass-gold {
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(37, 99, 235, 0.08);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(37, 99, 235, 0.2);
 }
 
 /* ゴールドグラデーション */
 .gradient-gold {
-  background: linear-gradient(135deg, #f59e0b, #f97316);
+  background: linear-gradient(135deg, #2563eb, #0ea5e9);
 }
 
 .gradient-gold-text {
-  background: linear-gradient(135deg, #fde68a, #f59e0b, #f97316);
+  background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -75,17 +76,17 @@ body {
 
 /* ネオングロウ */
 .glow-gold {
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3), 0 0 60px rgba(245, 158, 11, 0.1);
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
 }
 
 .glow-gold-sm {
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.25);
 }
 
 /* ダークカード */
 .dark-card {
-  background: #1a1a24;
-  border: 1px solid #2a2a38;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }
 
 /* アニメーション */

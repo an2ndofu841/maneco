@@ -46,7 +46,7 @@ export default function SmartPage() {
     coupon.discount_type === 'percentage' ? `${coupon.discount_value}%` : `¥${coupon.discount_value.toLocaleString()}`
 
   return (
-    <div className="min-h-screen bg-[#0f0f14]">
+    <div className="min-h-screen bg-transparent">
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-violet-500/6 rounded-full blur-[80px]" />
       </div>

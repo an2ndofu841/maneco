@@ -14,40 +14,40 @@ export default function StatsGrid({ user }: StatsGridProps) {
       value: user.total_points.toLocaleString(),
       unit: 'pt',
       icon: Star,
-      gradient: 'from-amber-500/15 to-orange-500/10',
-      border: 'border-amber-500/20',
-      iconColor: 'text-amber-400',
-      valueColor: 'text-amber-400',
+      gradient: 'from-blue-50 to-cyan-50',
+      border: 'border-blue-200',
+      iconColor: 'text-blue-600',
+      valueColor: 'text-blue-700',
     },
     {
       label: '累計節約額',
       value: `¥${user.total_savings.toLocaleString()}`,
       unit: '',
       icon: PiggyBank,
-      gradient: 'from-emerald-500/15 to-teal-500/10',
-      border: 'border-emerald-500/20',
-      iconColor: 'text-emerald-400',
-      valueColor: 'text-emerald-400',
+      gradient: 'from-emerald-50 to-teal-50',
+      border: 'border-emerald-200',
+      iconColor: 'text-emerald-600',
+      valueColor: 'text-emerald-700',
     },
     {
       label: '総獲得額',
       value: `¥${(user.total_points + user.total_savings).toLocaleString()}`,
       unit: '',
       icon: TrendingUp,
-      gradient: 'from-blue-500/15 to-indigo-500/10',
-      border: 'border-blue-500/20',
-      iconColor: 'text-blue-400',
-      valueColor: 'text-blue-400',
+      gradient: 'from-indigo-50 to-blue-50',
+      border: 'border-indigo-200',
+      iconColor: 'text-indigo-600',
+      valueColor: 'text-indigo-700',
     },
     {
       label: 'キャラLv',
       value: `Lv.${user.character_level}`,
       unit: '',
       icon: Zap,
-      gradient: 'from-violet-500/15 to-purple-500/10',
-      border: 'border-violet-500/20',
-      iconColor: 'text-violet-400',
-      valueColor: 'text-violet-400',
+      gradient: 'from-sky-50 to-blue-50',
+      border: 'border-sky-200',
+      iconColor: 'text-sky-600',
+      valueColor: 'text-sky-700',
     },
   ]
 
@@ -59,7 +59,7 @@ export default function StatsGrid({ user }: StatsGridProps) {
           className={`bg-gradient-to-br ${gradient} rounded-2xl p-4 border ${border}`}
         >
           <Icon className={`w-4 h-4 ${iconColor} mb-2`} />
-          <p className="text-white/40 text-xs mb-0.5">{label}</p>
+          <p className="text-slate-500 text-xs mb-0.5">{label}</p>
           <p className={`font-black text-lg ${valueColor} leading-tight`}>{value}</p>
         </div>
       ))}

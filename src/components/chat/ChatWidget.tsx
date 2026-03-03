@@ -81,12 +81,12 @@ export default function ChatWidget() {
   }
 
   return (
-    <div className="rounded-3xl overflow-hidden border border-white/8" style={{ background: '#1a1a24' }}>
+    <div className="rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-sm">
       {/* 入力エリア */}
       <div className="p-4">
         <div className="flex items-center gap-2 mb-1">
           <div className="w-5 h-5 gradient-gold rounded-full flex items-center justify-center text-[10px]">🐱</div>
-          <p className="text-white/40 text-xs font-medium">AIコンシェルジュに相談</p>
+          <p className="text-slate-500 text-xs font-medium">AIコンシェルジュに相談</p>
         </div>
         <div className="flex gap-2 mt-3">
           <input
@@ -95,7 +95,7 @@ export default function ChatWidget() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && sendMessage(input)}
             placeholder="「今月ピンチ」「旅行したい」など..."
-            className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-amber-500/40 transition-all"
+            className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-400 transition-all"
           />
           <button
             onClick={() => sendMessage(input)}
@@ -112,7 +112,7 @@ export default function ChatWidget() {
             <button
               key={prompt}
               onClick={() => sendMessage(prompt)}
-              className="flex-shrink-0 text-xs text-amber-400/80 bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-full hover:bg-amber-500/20 transition-colors whitespace-nowrap"
+              className="flex-shrink-0 text-xs text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors whitespace-nowrap"
             >
               {prompt}
             </button>
@@ -122,10 +122,10 @@ export default function ChatWidget() {
 
       {/* チャット履歴 */}
       {isOpen && messages.length > 0 && (
-        <div className="border-t border-white/8">
+        <div className="border-t border-slate-200">
           <div className="flex items-center justify-between px-4 py-2">
-            <span className="text-white/30 text-xs">チャット履歴</span>
-            <button onClick={() => setIsOpen(false)} className="text-white/30 hover:text-white/60 transition-colors">
+            <span className="text-slate-500 text-xs">チャット履歴</span>
+            <button onClick={() => setIsOpen(false)} className="text-slate-500 hover:text-slate-700 transition-colors">
               <ChevronDown className="w-4 h-4" />
             </button>
           </div>
@@ -140,7 +140,7 @@ export default function ChatWidget() {
                 <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
                   msg.role === 'user'
                     ? 'gradient-gold text-black font-medium rounded-br-sm'
-                    : 'bg-white/8 text-white/80 rounded-bl-sm border border-white/8'
+                    : 'bg-slate-100 text-slate-700 rounded-bl-sm border border-slate-200'
                 }`}>
                   {msg.content}
                 </div>
@@ -149,8 +149,8 @@ export default function ChatWidget() {
             {isLoading && (
               <div className="flex justify-start gap-2">
                 <div className="w-6 h-6 gradient-gold rounded-full flex items-center justify-center text-xs flex-shrink-0">🐱</div>
-                <div className="bg-white/8 rounded-2xl rounded-bl-sm px-3.5 py-2.5 border border-white/8">
-                  <Loader2 className="w-4 h-4 text-amber-400 animate-spin" />
+                <div className="bg-slate-100 rounded-2xl rounded-bl-sm px-3.5 py-2.5 border border-slate-200">
+                  <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
                 </div>
               </div>
             )}

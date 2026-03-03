@@ -37,7 +37,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0f14] overflow-hidden">
+    <div className="min-h-screen bg-transparent overflow-hidden">
       {/* 背景 */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-[-30%] left-[-20%] w-[500px] h-[500px] bg-amber-500/8 rounded-full blur-[100px]" />

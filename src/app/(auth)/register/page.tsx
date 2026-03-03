@@ -42,7 +42,7 @@ export default function RegisterPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[#0f0f14] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-transparent flex items-center justify-center p-6">
         <div className="text-center">
           <div className="w-20 h-20 bg-emerald-500/20 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6 border border-emerald-500/30">
             📧
@@ -58,7 +58,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0f14] overflow-hidden">
+    <div className="min-h-screen bg-transparent overflow-hidden">
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-[-30%] right-[-10%] w-[400px] h-[400px] bg-amber-500/8 rounded-full blur-[100px]" />
         <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] bg-orange-500/6 rounded-full blur-[80px]" />
