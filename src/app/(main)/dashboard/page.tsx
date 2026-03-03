@@ -4,7 +4,7 @@ import CharacterCard from '@/components/dashboard/CharacterCard'
 import StatsGrid from '@/components/dashboard/StatsGrid'
 import ChatWidget from '@/components/chat/ChatWidget'
 import Link from 'next/link'
-import { TrendingUp, ShoppingBag, Bell, ChevronRight } from 'lucide-react'
+import { TrendingUp, ShoppingBag, Bell, ChevronRight, Settings } from 'lucide-react'
 import { User } from '@/types'
 
 export default async function DashboardPage() {
@@ -38,76 +38,88 @@ export default async function DashboardPage() {
   const todayTip = tips[new Date().getDate() % tips.length]
 
   return (
-    <div className="min-h-screen bg-transparent">
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute right-[-10%] top-[-10%] h-[320px] w-[320px] rounded-full bg-blue-300/25 blur-[80px]" />
-      </div>
-
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 md:px-0">
-        <div className="flex items-center justify-between px-1 pb-4 pt-8 md:pt-10">
+    <div className="min-h-screen pb-24 md:pb-12">
+      <div className="app-container pt-8 md:pt-12">
+        {/* ヘッダー */}
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <p className="text-xs text-slate-500">おかえり 👋</p>
-            <h1 className="text-2xl font-black text-slate-900 md:text-3xl">{profile.nickname}</h1>
+            <p className="text-sm font-medium text-slate-500 mb-1">おかえりなさい 👋</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">{profile.nickname}</h1>
           </div>
-          <button className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <Bell className="h-4 w-4 text-slate-500" />
-          </button>
+          <div className="flex gap-3">
+            <button className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 shadow-sm hover:bg-slate-50 transition-colors">
+              <Bell className="w-5 h-5" />
+            </button>
+            <Link href="/profile" className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 shadow-sm hover:bg-slate-50 transition-colors">
+              <Settings className="w-5 h-5" />
+            </Link>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_340px]">
-          <section className="space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* 左カラム (メインコンテンツ) */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* キャラクターカード */}
             <CharacterCard user={profile} />
+            
+            {/* スタッツグリッド */}
             <StatsGrid user={profile} />
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+
+            {/* アクションカード */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Link href="/earn" className="group">
-                <div
-                  className="relative h-full overflow-hidden rounded-3xl p-5"
-                  style={{ background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)', border: '1px solid #a7f3d0' }}
-                >
-                  <div className="absolute right-0 top-0 h-24 w-24 rounded-full bg-emerald-300/40 blur-2xl" />
-                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl border border-emerald-300 bg-white/70">
-                    <TrendingUp className="h-5 w-5 text-emerald-600" />
+                <div className="bento-card p-6 rounded-3xl h-full relative overflow-hidden transition-all hover:border-emerald-200">
+                  <div className="absolute right-0 top-0 w-32 h-32 bg-emerald-100 rounded-full blur-3xl -mr-10 -mt-10 opacity-60" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 mb-4 group-hover:scale-110 transition-transform">
+                      <TrendingUp className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-900 mb-1">お金を増やす</h3>
+                    <p className="text-sm text-slate-500 mb-4">アンケートや査定で<br/>賢くお小遣い稼ぎ</p>
+                    <div className="flex items-center text-emerald-600 text-sm font-bold">
+                      今すぐ始める <ChevronRight className="w-4 h-4 ml-1" />
+                    </div>
                   </div>
-                  <p className="mb-1 text-base font-black leading-tight text-slate-900">お金を<br />増やす</p>
-                  <p className="text-xs text-emerald-700">アンケートで稼ぐ</p>
-                  <ChevronRight className="absolute bottom-4 right-4 h-3 w-3 text-emerald-700/60" />
                 </div>
               </Link>
 
               <Link href="/smart" className="group">
-                <div
-                  className="relative h-full overflow-hidden rounded-3xl p-5"
-                  style={{ background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)', border: '1px solid #bfdbfe' }}
-                >
-                  <div className="absolute right-0 top-0 h-24 w-24 rounded-full bg-blue-300/40 blur-2xl" />
-                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl border border-blue-300 bg-white/70">
-                    <ShoppingBag className="h-5 w-5 text-blue-600" />
+                <div className="bento-card p-6 rounded-3xl h-full relative overflow-hidden transition-all hover:border-blue-200">
+                  <div className="absolute right-0 top-0 w-32 h-32 bg-blue-100 rounded-full blur-3xl -mr-10 -mt-10 opacity-60" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+                      <ShoppingBag className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-900 mb-1">賢く使う</h3>
+                    <p className="text-sm text-slate-500 mb-4">旅行プラン作成や<br/>クーポン活用</p>
+                    <div className="flex items-center text-blue-600 text-sm font-bold">
+                      プランを見る <ChevronRight className="w-4 h-4 ml-1" />
+                    </div>
                   </div>
-                  <p className="mb-1 text-base font-black leading-tight text-slate-900">賢く<br />使う</p>
-                  <p className="text-xs text-blue-700">クーポン・旅行</p>
-                  <ChevronRight className="absolute bottom-4 right-4 h-3 w-3 text-blue-700/60" />
                 </div>
               </Link>
             </div>
-          </section>
+          </div>
 
-          <aside className="space-y-4">
-            <ChatWidget />
-            <div className="rounded-3xl border border-blue-200 bg-white p-4 shadow-sm">
-              <div className="flex items-start gap-3">
-                <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl border border-blue-200 bg-blue-50 text-base">
-                  💡
-                </div>
-                <div>
-                  <p className="mb-1 text-xs font-bold text-blue-700">今日のマネコヒント</p>
-                  <p className="text-xs leading-relaxed text-slate-600">{todayTip}</p>
-                </div>
+          {/* 右カラム (チャット & ヒント) */}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="bento-card p-1 rounded-3xl h-[500px] lg:h-full min-h-[500px] flex flex-col">
+              <ChatWidget />
+            </div>
+            
+            <div className="bento-card p-5 rounded-2xl flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-xl flex-shrink-0">
+                💡
+              </div>
+              <div>
+                <p className="text-xs font-bold text-amber-600 mb-1">今日のマネコヒント</p>
+                <p className="text-sm text-slate-600 leading-relaxed">{todayTip}</p>
               </div>
             </div>
-          </aside>
+          </div>
         </div>
-
-        <div className="h-4" />
       </div>
     </div>
   )

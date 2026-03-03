@@ -15,32 +15,28 @@ export default function BottomNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-pb md:hidden">
-      <div className="mx-auto max-w-lg px-4 pb-3">
-        <div className="glass flex items-center rounded-2xl border border-slate-200 px-2 py-1 shadow-lg">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-pb md:hidden pointer-events-none">
+      <div className="px-4 pb-6 pt-4 bg-gradient-to-t from-white via-white/90 to-transparent pointer-events-auto">
+        <div className="mx-auto max-w-sm bg-white/80 backdrop-blur-xl rounded-full border border-white/50 shadow-lg shadow-slate-200/50 flex items-center justify-between px-8 py-3">
           {navItems.map(({ href, icon: Icon, label }) => {
             const isActive = pathname === href || pathname.startsWith(href + '/')
             return (
               <Link
                 key={href}
                 href={href}
-                className={`flex-1 flex flex-col items-center py-2 gap-0.5 rounded-xl transition-all ${
+                className={`flex flex-col items-center gap-1 transition-all relative ${
                   isActive
-                    ? 'bg-blue-50'
-                    : 'hover:bg-slate-50'
+                    ? 'text-indigo-600 scale-110'
+                    : 'text-slate-400 hover:text-slate-600'
                 }`}
               >
                 <Icon
-                  className={`w-5 h-5 transition-colors ${
-                    isActive ? 'text-blue-600' : 'text-slate-400'
-                  }`}
-                  strokeWidth={isActive ? 2.5 : 1.5}
+                  className="w-6 h-6"
+                  strokeWidth={isActive ? 2.5 : 2}
                 />
-                <span className={`text-[10px] font-medium transition-colors ${
-                  isActive ? 'text-blue-600' : 'text-slate-500'
-                }`}>
-                  {label}
-                </span>
+                {isActive && (
+                  <span className="absolute -bottom-2 w-1 h-1 rounded-full bg-indigo-600" />
+                )}
               </Link>
             )
           })}

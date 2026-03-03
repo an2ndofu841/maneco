@@ -42,92 +42,97 @@ export default function RegisterPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-transparent flex items-center justify-center p-6">
-        <div className="text-center">
-          <div className="w-20 h-20 bg-emerald-500/20 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6 border border-emerald-500/30">
-            📧
+      <div className="min-h-screen flex items-center justify-center p-6">
+        <div className="w-full max-w-md bg-white/50 backdrop-blur-xl rounded-[2.5rem] border border-white/60 shadow-xl p-12 text-center">
+          <div className="w-20 h-20 bg-emerald-100 rounded-3xl flex items-center justify-center text-emerald-600 mb-6 mx-auto animate-bounce">
+            <Mail className="w-10 h-10" />
           </div>
-          <h2 className="text-xl font-black text-slate-900 mb-2">確認メールを送りました！</h2>
-          <p className="text-slate-600 text-sm leading-relaxed">
-            メールのリンクをクリックして<br />登録を完了してください
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">確認メールを送信しました</h2>
+          <p className="text-slate-600 mb-8 leading-relaxed">
+            メール内のリンクをクリックして<br />登録を完了してください。
           </p>
-          <p className="text-slate-500 text-xs mt-4">3秒後にログイン画面へ移動します...</p>
+          <p className="text-xs text-slate-400">3秒後にログイン画面へ移動します...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-transparent overflow-hidden text-slate-900">
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-30%] right-[-10%] w-[400px] h-[400px] bg-amber-500/8 rounded-full blur-[100px]" />
-        <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] bg-orange-500/6 rounded-full blur-[80px]" />
-      </div>
-
-      <div className="relative z-10 mx-auto grid min-h-screen w-full max-w-6xl grid-cols-1 px-6 py-8 md:grid-cols-2 md:gap-10 md:px-10">
-        <section className="hidden flex-col justify-between rounded-3xl border border-slate-200 bg-white p-8 shadow-sm md:flex">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-gold text-lg">🐱</div>
-            <span className="text-base font-black text-slate-900">マネコ</span>
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 bg-white/50 backdrop-blur-xl rounded-[2.5rem] border border-white/60 shadow-xl overflow-hidden">
+        
+        {/* 左側：ブランディング (PCのみ) */}
+        <div className="hidden md:flex flex-col justify-between p-12 bg-slate-50/50">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white text-lg shadow-md">
+              🐱
+            </div>
+            <span className="font-bold text-lg tracking-tight text-slate-900">maneco</span>
           </div>
+          
           <div>
-            <p className="mb-2 text-xs text-blue-700">GET STARTED</p>
-            <h2 className="text-3xl font-black leading-tight text-slate-900">
-              無理なく続く
-              <br />
-              <span className="gradient-gold-text">マネープラン習慣</span>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4 leading-tight">
+              無理なく続く、<br />
+              <span className="text-indigo-600">マネープラン習慣。</span>
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-slate-600">
-              登録後すぐに、AIコンシェルジュがあなた向けの節約・収益アクションを提案します。
+            <p className="text-slate-600 leading-relaxed">
+              登録後すぐに、AIコンシェルジュが<br />
+              あなた向けの節約・収益アクションを提案します。
             </p>
           </div>
-          <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4 text-xs text-slate-600">
-            すでにアカウントをお持ちならログインから再開できます。
+          
+          <div className="text-xs text-slate-400">
+            © 2026 maneco
           </div>
-        </section>
+        </div>
 
-        <section className="flex flex-col justify-center py-6 md:py-0">
-          <div className="mb-6 flex items-center gap-2.5 md:hidden">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl gradient-gold text-lg">🐱</div>
-            <span className="text-base font-black text-slate-900">マネコ</span>
+        {/* 右側：フォーム */}
+        <div className="p-8 md:p-12 flex flex-col justify-center">
+          <div className="md:hidden flex items-center gap-2 mb-8 justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white text-lg shadow-md">
+              🐱
+            </div>
+            <span className="font-bold text-lg tracking-tight text-slate-900">maneco</span>
           </div>
-          <div className="w-full max-w-md">
-          <h1 className="text-3xl font-black text-slate-900 mb-1">はじめまして</h1>
-          <p className="text-slate-500 text-sm mb-8">30秒で登録完了！無料で全機能使えます</p>
+
+          <div className="text-center md:text-left mb-8">
+            <h1 className="text-2xl font-bold text-slate-900 mb-2">はじめまして</h1>
+            <p className="text-slate-500 text-sm">30秒で登録完了！無料で全機能使えます</p>
+          </div>
 
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl p-3 mb-5 text-sm flex items-center gap-2">
+            <div className="bg-red-50 text-red-600 text-sm p-3 rounded-xl mb-6 flex items-center gap-2 border border-red-100">
               <span>⚠️</span> {error}
             </div>
           )}
 
-          <form onSubmit={handleRegister} className="space-y-3">
+          <form onSubmit={handleRegister} className="space-y-4">
             <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25" />
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
               <input
                 type="text"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 placeholder="ニックネーム"
                 required
-                className="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-400 transition-all"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
               />
             </div>
 
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25" />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="メールアドレス"
                 required
-                className="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-400 transition-all"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
               />
             </div>
 
             <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25" />
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
@@ -135,21 +140,21 @@ export default function RegisterPage() {
                 placeholder="パスワード（8文字以上）"
                 minLength={8}
                 required
-                className="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-11 py-3.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-400 transition-all"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-12 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
               >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full gradient-gold text-black font-black py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2 glow-gold-sm hover:opacity-90 transition-all disabled:opacity-40 active:scale-[0.98] mt-2"
+              className="w-full btn-primary py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? '登録中...' : (
                 <>無料で登録する <ArrowRight className="w-4 h-4" /></>
@@ -157,14 +162,13 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          <p className="text-center text-slate-500 text-xs mt-6">
+          <p className="text-center text-slate-500 text-sm mt-8">
             すでにアカウントをお持ちの方は{' '}
-            <Link href="/login" className="text-amber-400 hover:text-amber-300 font-medium">
+            <Link href="/login" className="text-indigo-600 hover:text-indigo-700 font-bold">
               ログイン
             </Link>
           </p>
-          </div>
-        </section>
+        </div>
       </div>
     </div>
   )

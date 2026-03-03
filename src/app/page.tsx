@@ -9,8 +9,9 @@ import {
   Plane,
   ShieldCheck,
   MessageCircle,
-  BadgeCheck,
-  ChartNoAxesCombined,
+  Zap,
+  PieChart,
+  CreditCard
 } from 'lucide-react'
 
 export default async function HomePage() {
@@ -19,166 +20,202 @@ export default async function HomePage() {
   if (user) redirect('/dashboard')
 
   return (
-    <div className="min-h-screen overflow-hidden text-slate-900">
-      <div className="pointer-events-none fixed inset-0">
-        <div className="absolute left-[-140px] top-[-90px] h-[440px] w-[440px] rounded-full bg-blue-300/30 blur-[110px]" />
-        <div className="absolute right-[-140px] top-[80px] h-[440px] w-[440px] rounded-full bg-cyan-300/30 blur-[110px]" />
-        <div className="absolute bottom-[-140px] left-[30%] h-[280px] w-[280px] rounded-full bg-indigo-200/30 blur-[90px]" />
-      </div>
-
-      <header className="relative z-10 app-container flex items-center justify-between py-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl gradient-gold text-xl text-white shadow-lg">🐱</div>
-          <div>
-            <p className="text-xl font-black leading-none">マネコ</p>
-            <p className="text-xs text-slate-500">AI Money Concierge</p>
+    <div className="min-h-screen overflow-x-hidden">
+      {/* ナビゲーション */}
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/70 border-b border-white/20">
+        <div className="app-container flex items-center justify-between h-16">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white text-lg shadow-md">
+              🐱
+            </div>
+            <span className="font-bold text-lg tracking-tight text-slate-900">maneco</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+              ログイン
+            </Link>
+            <Link
+              href="/register"
+              className="bg-slate-900 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20"
+            >
+              無料で始める
+            </Link>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Link href="/login" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
-            ログイン
-          </Link>
-          <Link href="/register" className="hidden rounded-xl gradient-gold px-4 py-2 text-sm font-bold text-white shadow-sm md:block">
-            無料登録
-          </Link>
-        </div>
-      </header>
+      </nav>
 
-      <main className="relative z-10">
-        <section className="app-container grid min-h-[88vh] grid-cols-1 items-center gap-12 py-10 lg:grid-cols-2">
-          <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700">
-              <Sparkles className="h-3.5 w-3.5" />
-              金欠から資産形成まで、AIが伴走
+      {/* ヒーローセクション */}
+      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div className="app-container relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-medium mb-8 animate-fade-in-up">
+              <Sparkles className="w-3 h-3" />
+              <span>AIがお金の悩みを0秒で解決</span>
             </div>
-            <h1 className="text-[clamp(2.8rem,7vw,6.3rem)] font-black leading-[0.98] tracking-tight">
-              <span className="gradient-gold-text">お金の不安</span>を
-              <br />
-              <span className="text-slate-900">今日で終わらせる。</span>
+            
+            <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1] mb-6">
+              お金の不安を、<br className="hidden md:block" />
+              <span className="text-gradient-primary">シンプルに整える。</span>
             </h1>
-            <p className="mt-7 max-w-xl text-[17px] leading-relaxed text-slate-600 md:text-lg">
-              AIに一言送るだけで、今のあなたに合った「増やす」「賢く使う」アクションを最短提案。
-              面倒な記録・設定なしで、続くお金習慣を作ります。
+            
+            <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+              「今月ピンチ」「旅行に行きたい」... その悩み、AIに話すだけ。<br className="hidden md:block" />
+              面倒な家計簿は不要。あなたに最適なアクションを即座に提案します。
             </p>
-
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/register"
-                className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl gradient-gold px-8 text-base font-black text-white shadow-lg transition hover:opacity-95 md:h-[58px]"
+                className="btn-primary h-12 px-8 rounded-full flex items-center gap-2 font-semibold text-base w-full sm:w-auto justify-center"
               >
-                無料で始める
-                <ArrowRight className="h-4 w-4" />
+                今すぐ始める
+                <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/login"
-                className="inline-flex h-14 items-center justify-center rounded-2xl border border-slate-300 bg-white px-8 text-base font-semibold text-slate-700 transition hover:bg-slate-50 md:h-[58px]"
+                className="h-12 px-8 rounded-full flex items-center gap-2 font-medium text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors w-full sm:w-auto justify-center"
               >
-                既に登録済みの方
+                ログイン
               </Link>
             </div>
 
-            <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-600">
-              <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-emerald-500" /> クレカ不要</span>
-              <span className="inline-flex items-center gap-1.5"><Wallet className="h-4 w-4 text-blue-500" /> 登録30秒</span>
-              <span className="inline-flex items-center gap-1.5"><TrendingUp className="h-4 w-4 text-cyan-500" /> 毎日アクション提案</span>
+            <div className="mt-12 flex items-center justify-center gap-6 text-sm text-slate-500">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                <span>完全無料</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Zap className="w-4 h-4 text-amber-500" />
+                <span>登録30秒</span>
+              </div>
             </div>
           </div>
+        </div>
+        
+        {/* 背景装飾 */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-3xl -z-10 pointer-events-none" />
+      </section>
 
-          <div className="relative">
-            <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_22px_55px_rgba(15,23,42,0.12)]">
-              <div className="flex items-center justify-between">
-                <p className="text-base font-bold text-slate-900">マネコダッシュボード</p>
-                <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">Live</span>
-              </div>
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                <MockStat title="獲得ポイント" value="18,250 pt" tone="blue" />
-                <MockStat title="累計節約額" value="¥64,300" tone="emerald" />
-                <MockStat title="今月の行動" value="24 actions" tone="cyan" />
-                <MockStat title="達成率" value="78%" tone="indigo" />
-              </div>
-              <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                <p className="text-xs font-medium text-slate-500">AI提案</p>
-                <p className="mt-1.5 text-[15px] font-semibold leading-relaxed text-slate-900">「固定費見直し」で今月 +5,800円改善見込み</p>
-                <div className="mt-2.5 flex items-center gap-2 text-sm text-slate-600">
-                  <MessageCircle className="h-4 w-4 text-blue-500" />
-                  3分で完了するチェックリストを開始
+      {/* Bento Grid セクション */}
+      <section className="py-20 bg-white/50 border-t border-slate-100">
+        <div className="app-container">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">
+              必要な機能だけを、<br />
+              美しくパッケージ。
+            </h2>
+            <p className="text-slate-600">
+              複雑な機能はいりません。直感的に使える3つのコア機能。
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {/* カード 1: AIチャット (大) */}
+            <div className="bento-card md:col-span-2 p-8 rounded-3xl relative overflow-hidden group">
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-600 mb-6">
+                  <MessageCircle className="w-6 h-6" />
                 </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">AIコンシェルジュ</h3>
+                <p className="text-slate-600 max-w-md">
+                  「来月の旅行予算を作りたい」「今すぐ3000円節約したい」<br />
+                  どんな悩みもチャットで相談。具体的なアクションプランを提示します。
+                </p>
+              </div>
+              <div className="absolute right-[-20px] bottom-[-20px] opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+                <MessageCircle className="w-64 h-64" />
               </div>
             </div>
-            <div className="absolute -right-4 -top-4 hidden rounded-2xl border border-blue-200 bg-white px-3.5 py-2.5 text-xs font-semibold text-blue-700 shadow-sm md:block">
-              今週の改善額 +¥12,400
+
+            {/* カード 2: 稼ぐ (小) */}
+            <div className="bento-card p-8 rounded-3xl relative overflow-hidden group">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 mb-6">
+                <Wallet className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">スキマで稼ぐ</h3>
+              <p className="text-slate-600 text-sm">
+                アンケートや不用品査定で、<br />
+                賢くお小遣い稼ぎ。
+              </p>
+            </div>
+
+            {/* カード 3: 使う (小) */}
+            <div className="bento-card p-8 rounded-3xl relative overflow-hidden group">
+              <div className="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600 mb-6">
+                <Plane className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">賢く使う</h3>
+              <p className="text-slate-600 text-sm">
+                予算逆算型の旅行プランナーや<br />
+                最適化されたクーポン。
+              </p>
+            </div>
+
+            {/* カード 4: 可視化 (大) */}
+            <div className="bento-card md:col-span-2 p-8 rounded-3xl relative overflow-hidden group">
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 mb-6">
+                  <PieChart className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">成長が見える化</h3>
+                <p className="text-slate-600 max-w-md">
+                  節約した額、稼いだ額を自動で集計。<br />
+                  キャラクターの成長と共に、あなたの資産形成スキルも向上します。
+                </p>
+              </div>
+              <div className="absolute right-[-20px] bottom-[-20px] opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+                <TrendingUp className="w-64 h-64" />
+              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="app-container pb-20">
-          <div className="mb-6 text-center">
-            <p className="text-sm font-semibold text-blue-700">Why Maneco</p>
-            <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900 md:text-4xl">迷わず行動できる設計</h2>
+      {/* CTA セクション */}
+      <section className="py-24">
+        <div className="app-container">
+          <div className="bg-slate-900 rounded-[2.5rem] p-12 md:p-20 text-center relative overflow-hidden">
+            <div className="relative z-10 max-w-2xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                お金の不安を、<br />
+                今日で終わりにしませんか？
+              </h2>
+              <p className="text-slate-400 mb-10 text-lg">
+                クレジットカード登録不要。30秒でアカウント作成。<br />
+                まずはAIに「こんにちは」と話しかけてみてください。
+              </p>
+              <Link
+                href="/register"
+                className="inline-flex items-center justify-center h-14 px-8 rounded-full bg-white text-slate-900 font-bold text-base hover:bg-indigo-50 transition-colors"
+              >
+                無料でアカウント作成
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
+            </div>
+            
+            {/* 装飾 */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+              <div className="absolute top-[-50%] left-[-20%] w-[600px] h-[600px] bg-indigo-600/30 rounded-full blur-[100px]" />
+              <div className="absolute bottom-[-50%] right-[-20%] w-[600px] h-[600px] bg-blue-600/30 rounded-full blur-[100px]" />
+            </div>
           </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            <ValueCard
-              icon={<BadgeCheck className="h-5 w-5 text-blue-600" />}
-              title="思考停止でも使える"
-              desc="AIチャットと2つの行動ボタンだけ。迷わない導線で毎日続く。"
-            />
-            <ValueCard
-              icon={<Plane className="h-5 w-5 text-cyan-600" />}
-              title="予算内でちゃんと遊べる"
-              desc="旅行・買い物を我慢しない。予算逆算でムリなく楽しむ設計。"
-            />
-            <ValueCard
-              icon={<ChartNoAxesCombined className="h-5 w-5 text-emerald-600" />}
-              title="成果が可視化される"
-              desc="節約額と獲得額を一目で確認。達成感が積み上がるUI。"
-            />
+        </div>
+      </section>
+
+      {/* フッター */}
+      <footer className="py-12 border-t border-slate-200 bg-white">
+        <div className="app-container flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded bg-slate-900 flex items-center justify-center text-white text-xs">
+              🐱
+            </div>
+            <span className="font-bold text-slate-900">maneco</span>
           </div>
-        </section>
-      </main>
-    </div>
-  )
-}
-
-function ValueCard({
-  icon,
-  title,
-  desc,
-}: {
-  icon: React.ReactNode
-  title: string
-  desc: string
-}) {
-  return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-50">{icon}</div>
-      <p className="mt-4 text-lg font-black text-slate-900">{title}</p>
-      <p className="mt-2 text-sm leading-relaxed text-slate-600">{desc}</p>
-    </div>
-  )
-}
-
-function MockStat({
-  title,
-  value,
-  tone,
-}: {
-  title: string
-  value: string
-  tone: 'blue' | 'emerald' | 'cyan' | 'indigo'
-}) {
-  const toneClass =
-    tone === 'blue'
-      ? 'border-blue-200 bg-blue-50 text-blue-700'
-      : tone === 'emerald'
-      ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-      : tone === 'cyan'
-      ? 'border-cyan-200 bg-cyan-50 text-cyan-700'
-      : 'border-indigo-200 bg-indigo-50 text-indigo-700'
-
-  return (
-    <div className={`rounded-2xl border p-3.5 ${toneClass}`}>
-      <p className="text-xs opacity-75">{title}</p>
-      <p className="mt-1.5 text-[15px] font-black">{value}</p>
+          <p className="text-slate-500 text-sm">
+            © 2026 maneco. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   )
 }

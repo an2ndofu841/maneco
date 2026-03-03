@@ -6,13 +6,13 @@ import { Coupon } from '@/types'
 import TravelPlanner from '@/components/smart/TravelPlanner'
 import { Plane, Tag, ExternalLink, Search } from 'lucide-react'
 
-const COUPON_CATEGORY_CONFIG: Record<string, { label: string; emoji: string; color: string }> = {
-  travel: { label: '旅行', emoji: '✈️', color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
-  food: { label: 'グルメ', emoji: '🍽️', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' },
-  shopping: { label: 'ショッピング', emoji: '🛍️', color: 'text-pink-400 bg-pink-500/10 border-pink-500/20' },
-  tax: { label: '節税', emoji: '💰', color: 'text-amber-400 bg-amber-500/10 border-amber-500/20' },
-  telecom: { label: '通信費', emoji: '📱', color: 'text-purple-400 bg-purple-500/10 border-purple-500/20' },
-  investment: { label: '投資', emoji: '📈', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
+const COUPON_CATEGORY_CONFIG: Record<string, { label: string; emoji: string; color: string; bg: string }> = {
+  travel: { label: '旅行', emoji: '✈️', color: 'text-blue-600', bg: 'bg-blue-50 border-blue-100' },
+  food: { label: 'グルメ', emoji: '🍽️', color: 'text-orange-600', bg: 'bg-orange-50 border-orange-100' },
+  shopping: { label: 'ショッピング', emoji: '🛍️', color: 'text-pink-600', bg: 'bg-pink-50 border-pink-100' },
+  tax: { label: '節税', emoji: '💰', color: 'text-amber-600', bg: 'bg-amber-50 border-amber-100' },
+  telecom: { label: '通信費', emoji: '📱', color: 'text-purple-600', bg: 'bg-purple-50 border-purple-100' },
+  investment: { label: '投資', emoji: '📈', color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-100' },
 }
 
 export default function SmartPage() {
@@ -46,70 +46,67 @@ export default function SmartPage() {
     coupon.discount_type === 'percentage' ? `${coupon.discount_value}%` : `¥${coupon.discount_value.toLocaleString()}`
 
   return (
-    <div className="min-h-screen bg-transparent">
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-violet-500/6 rounded-full blur-[80px]" />
-      </div>
+    <div className="min-h-screen pb-24 md:pb-12">
+      <div className="app-container pt-8 md:pt-12">
+        {/* ヘッダー */}
+        <div className="mb-8">
+          <p className="text-slate-500 text-sm font-medium mb-1">お得に賢く</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">賢く使う 🛍️</h1>
 
-      {/* ヘッダー */}
-      <div className="relative z-10 mx-auto w-full max-w-5xl px-5 pb-4 pt-14 md:px-0 md:pt-10">
-        <p className="text-white/40 text-xs mb-1">お得に賢く</p>
-        <h1 className="text-white font-black text-2xl mb-4 md:text-3xl">賢く使う 🛍️</h1>
-
-        {/* タブ */}
-        <div className="flex bg-white/5 rounded-2xl p-1 border border-white/8">
-          <button
-            onClick={() => setActiveTab('coupon')}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-bold transition-all ${
-              activeTab === 'coupon'
-                ? 'gradient-gold text-black'
-                : 'text-white/40'
-            }`}
-          >
-            <Tag className="w-3.5 h-3.5" />
-            クーポン
-          </button>
-          <button
-            onClick={() => setActiveTab('travel')}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-bold transition-all ${
-              activeTab === 'travel'
-                ? 'gradient-gold text-black'
-                : 'text-white/40'
-            }`}
-          >
-            <Plane className="w-3.5 h-3.5" />
-            旅行プランナー
-          </button>
+          {/* タブ */}
+          <div className="flex bg-slate-100 p-1 rounded-2xl max-w-md">
+            <button
+              onClick={() => setActiveTab('coupon')}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${
+                activeTab === 'coupon'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              <Tag className="w-4 h-4" />
+              クーポン
+            </button>
+            <button
+              onClick={() => setActiveTab('travel')}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${
+                activeTab === 'travel'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              <Plane className="w-4 h-4" />
+              旅行プランナー
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-5xl px-4 md:px-0">
         {activeTab === 'coupon' ? (
-          <div className="space-y-4">
-            {/* 検索 */}
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="クーポンを検索..."
-                className="w-full bg-white/5 border border-white/10 rounded-2xl pl-11 pr-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-violet-500/40 transition-all"
-              />
+          <div className="space-y-6">
+            {/* 検索 & フィルター */}
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="クーポンを検索..."
+                  className="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                />
+              </div>
             </div>
 
-            {/* カテゴリフィルター */}
-            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
               {categories.map((cat) => {
                 const config = COUPON_CATEGORY_CONFIG[cat]
                 return (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full border font-medium transition-all flex items-center gap-1 ${
+                    className={`flex-shrink-0 text-xs px-4 py-2 rounded-full border font-bold transition-all flex items-center gap-1.5 ${
                       selectedCategory === cat
-                        ? 'bg-violet-500/20 text-violet-400 border-violet-500/40'
-                        : 'text-white/30 border-white/10 hover:border-white/20'
+                        ? 'bg-slate-900 text-white border-slate-900 shadow-md'
+                        : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
                     }`}
                   >
                     {cat !== 'all' && config?.emoji}
@@ -125,44 +122,43 @@ export default function SmartPage() {
                 <div className="text-3xl animate-bounce">🛍️</div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {filteredCoupons.map((coupon) => {
                   const daysLeft = getDaysLeft(coupon.valid_until)
                   const isExpiringSoon = daysLeft <= 7
                   const catConfig = COUPON_CATEGORY_CONFIG[coupon.category]
 
                   return (
-                    <div key={coupon.id} className="rounded-3xl overflow-hidden border border-white/8"
-                      style={{ background: '#1a1a24' }}>
-                      <div className="flex">
+                    <div key={coupon.id} className="bento-card rounded-3xl overflow-hidden group hover:border-indigo-200 transition-all">
+                      <div className="flex h-full">
                         {/* 割引バッジ */}
-                        <div className="w-20 flex-shrink-0 flex flex-col items-center justify-center py-4 px-2"
-                          style={{ background: 'linear-gradient(135deg, rgba(167,139,250,0.2) 0%, rgba(139,92,246,0.1) 100%)', borderRight: '1px solid rgba(167,139,250,0.15)' }}>
-                          <p className="text-violet-300 font-black text-xl leading-none">{getDiscountText(coupon)}</p>
-                          <p className="text-violet-400/60 text-[10px]">オフ</p>
+                        <div className="w-24 flex-shrink-0 flex flex-col items-center justify-center p-2 bg-gradient-to-br from-indigo-50 to-blue-50 border-r border-indigo-100">
+                          <p className="text-indigo-600 font-black text-2xl leading-none tracking-tight">{getDiscountText(coupon)}</p>
+                          <p className="text-indigo-400 text-[10px] font-bold mt-1">OFF</p>
                         </div>
 
-                        <div className="flex-1 p-3">
-                          <div className="flex items-center gap-1.5 mb-1">
-                            <span className={`text-[10px] border px-1.5 py-0.5 rounded-full ${catConfig?.color}`}>
-                              {catConfig?.emoji} {catConfig?.label}
-                            </span>
+                        <div className="flex-1 p-4 flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className={`text-[10px] font-bold border px-2 py-0.5 rounded-full ${catConfig?.color} ${catConfig?.bg}`}>
+                                {catConfig?.emoji} {catConfig?.label}
+                              </span>
+                            </div>
+                            <p className="text-slate-400 text-[10px] font-bold mb-0.5">{coupon.brand_name}</p>
+                            <h3 className="font-bold text-slate-900 text-sm leading-snug line-clamp-2">{coupon.title}</h3>
                           </div>
-                          <p className="text-white/50 text-[10px]">{coupon.brand_name}</p>
-                          <p className="font-bold text-white text-sm leading-snug">{coupon.title}</p>
-                          <p className="text-white/35 text-[11px] mt-0.5 line-clamp-2">{coupon.description}</p>
 
-                          <div className="flex items-center justify-between mt-2.5">
-                            <span className={`text-[10px] ${isExpiringSoon ? 'text-red-400' : 'text-white/25'}`}>
-                              {isExpiringSoon ? `⚠️ 残り${daysLeft}日` : `${daysLeft}日有効`}
+                          <div className="flex items-end justify-between mt-3">
+                            <span className={`text-[10px] font-medium ${isExpiringSoon ? 'text-red-500' : 'text-slate-400'}`}>
+                              {isExpiringSoon ? `⚠️ 残り${daysLeft}日` : `あと${daysLeft}日有効`}
                             </span>
                             <a
                               href={coupon.affiliate_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center gap-1 text-[11px] font-bold text-violet-400 bg-violet-500/15 border border-violet-500/25 px-3 py-1 rounded-lg hover:bg-violet-500/25 transition-colors"
+                              className="flex items-center gap-1 text-[11px] font-bold text-white bg-slate-900 px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-colors shadow-sm"
                             >
-                              使う <ExternalLink className="w-2.5 h-2.5" />
+                              使う <ExternalLink className="w-3 h-3" />
                             </a>
                           </div>
                         </div>
@@ -172,9 +168,10 @@ export default function SmartPage() {
                 })}
 
                 {filteredCoupons.length === 0 && (
-                  <div className="text-center py-10 text-white/30">
-                    <p className="text-3xl mb-2">🔍</p>
-                    <p className="text-sm">クーポンが見つかりません</p>
+                  <div className="col-span-full text-center py-12 bg-slate-50 rounded-3xl border border-slate-100 border-dashed">
+                    <p className="text-4xl mb-3">🔍</p>
+                    <p className="text-slate-500 font-medium">クーポンが見つかりません</p>
+                    <p className="text-slate-400 text-sm mt-1">条件を変えて検索してみてください</p>
                   </div>
                 )}
               </div>
@@ -183,8 +180,6 @@ export default function SmartPage() {
         ) : (
           <TravelPlanner />
         )}
-
-        <div className="h-4" />
       </div>
     </div>
   )
