@@ -11,7 +11,6 @@ const notoSansJP = Noto_Sans_JP({
 export const metadata: Metadata = {
   title: 'マネコ | AIマネーコンシェルジュ',
   description: '金欠から資産形成まで。お金の「どうしよう？」を0秒で解決するAIコンシェルジュ',
-  manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',

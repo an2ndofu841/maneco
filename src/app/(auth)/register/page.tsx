@@ -47,41 +47,41 @@ export default function RegisterPage() {
           <div className="w-20 h-20 bg-emerald-500/20 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6 border border-emerald-500/30">
             📧
           </div>
-          <h2 className="text-xl font-black text-white mb-2">確認メールを送りました！</h2>
-          <p className="text-white/40 text-sm leading-relaxed">
+          <h2 className="text-xl font-black text-slate-900 mb-2">確認メールを送りました！</h2>
+          <p className="text-slate-600 text-sm leading-relaxed">
             メールのリンクをクリックして<br />登録を完了してください
           </p>
-          <p className="text-white/25 text-xs mt-4">3秒後にログイン画面へ移動します...</p>
+          <p className="text-slate-500 text-xs mt-4">3秒後にログイン画面へ移動します...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-transparent overflow-hidden">
+    <div className="min-h-screen bg-transparent overflow-hidden text-slate-900">
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-[-30%] right-[-10%] w-[400px] h-[400px] bg-amber-500/8 rounded-full blur-[100px]" />
         <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] bg-orange-500/6 rounded-full blur-[80px]" />
       </div>
 
       <div className="relative z-10 mx-auto grid min-h-screen w-full max-w-6xl grid-cols-1 px-6 py-8 md:grid-cols-2 md:gap-10 md:px-10">
-        <section className="hidden flex-col justify-between rounded-3xl border border-white/8 bg-[#181823] p-8 md:flex">
+        <section className="hidden flex-col justify-between rounded-3xl border border-slate-200 bg-white p-8 shadow-sm md:flex">
           <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-gold text-lg">🐱</div>
-            <span className="text-base font-black text-white">マネコ</span>
+            <span className="text-base font-black text-slate-900">マネコ</span>
           </div>
           <div>
-            <p className="mb-2 text-xs text-amber-300/80">GET STARTED</p>
-            <h2 className="text-3xl font-black leading-tight text-white">
+            <p className="mb-2 text-xs text-blue-700">GET STARTED</p>
+            <h2 className="text-3xl font-black leading-tight text-slate-900">
               無理なく続く
               <br />
               <span className="gradient-gold-text">マネープラン習慣</span>
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-white/50">
+            <p className="mt-3 text-sm leading-relaxed text-slate-600">
               登録後すぐに、AIコンシェルジュがあなた向けの節約・収益アクションを提案します。
             </p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-xs text-white/45">
+          <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4 text-xs text-slate-600">
             すでにアカウントをお持ちならログインから再開できます。
           </div>
         </section>
@@ -89,11 +89,11 @@ export default function RegisterPage() {
         <section className="flex flex-col justify-center py-6 md:py-0">
           <div className="mb-6 flex items-center gap-2.5 md:hidden">
             <div className="flex h-8 w-8 items-center justify-center rounded-xl gradient-gold text-lg">🐱</div>
-            <span className="text-base font-black text-white">マネコ</span>
+            <span className="text-base font-black text-slate-900">マネコ</span>
           </div>
           <div className="w-full max-w-md">
-          <h1 className="text-3xl font-black text-white mb-1">はじめまして</h1>
-          <p className="text-white/40 text-sm mb-8">30秒で登録完了！無料で全機能使えます</p>
+          <h1 className="text-3xl font-black text-slate-900 mb-1">はじめまして</h1>
+          <p className="text-slate-500 text-sm mb-8">30秒で登録完了！無料で全機能使えます</p>
 
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl p-3 mb-5 text-sm flex items-center gap-2">
@@ -110,7 +110,7 @@ export default function RegisterPage() {
                 onChange={(e) => setNickname(e.target.value)}
                 placeholder="ニックネーム"
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-white/25 focus:outline-none focus:border-amber-500/50 transition-all"
+                className="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-400 transition-all"
               />
             </div>
 
@@ -122,7 +122,7 @@ export default function RegisterPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="メールアドレス"
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-white/25 focus:outline-none focus:border-amber-500/50 transition-all"
+                className="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-400 transition-all"
               />
             </div>
 
@@ -135,12 +135,12 @@ export default function RegisterPage() {
                 placeholder="パスワード（8文字以上）"
                 minLength={8}
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-2xl pl-11 pr-11 py-3.5 text-sm text-white placeholder-white/25 focus:outline-none focus:border-amber-500/50 transition-all"
+                className="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-11 py-3.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-400 transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/50"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -157,7 +157,7 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          <p className="text-center text-white/30 text-xs mt-6">
+          <p className="text-center text-slate-500 text-xs mt-6">
             すでにアカウントをお持ちの方は{' '}
             <Link href="/login" className="text-amber-400 hover:text-amber-300 font-medium">
               ログイン

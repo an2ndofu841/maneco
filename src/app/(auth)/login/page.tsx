@@ -37,7 +37,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-transparent overflow-hidden">
+    <div className="min-h-screen bg-transparent overflow-hidden text-slate-900">
       {/* 背景 */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-[-30%] left-[-20%] w-[500px] h-[500px] bg-amber-500/8 rounded-full blur-[100px]" />
@@ -45,23 +45,23 @@ export default function LoginPage() {
       </div>
 
       <div className="relative z-10 mx-auto grid min-h-screen w-full max-w-6xl grid-cols-1 px-6 py-8 md:grid-cols-2 md:gap-10 md:px-10">
-        <section className="hidden flex-col justify-between rounded-3xl border border-white/8 bg-[#181823] p-8 md:flex">
+        <section className="hidden flex-col justify-between rounded-3xl border border-slate-200 bg-white p-8 shadow-sm md:flex">
           <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-gold text-lg">🐱</div>
-            <span className="text-base font-black text-white">マネコ</span>
+            <span className="text-base font-black text-slate-900">マネコ</span>
           </div>
           <div>
-            <p className="mb-2 text-xs text-amber-300/80">AI MONEY CONCIERGE</p>
-            <h2 className="text-3xl font-black leading-tight text-white">
+            <p className="mb-2 text-xs text-blue-700">AI MONEY CONCIERGE</p>
+            <h2 className="text-3xl font-black leading-tight text-slate-900">
               お金の不安を
               <br />
               <span className="gradient-gold-text">今日で終わらせる</span>
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-white/50">
+            <p className="mt-3 text-sm leading-relaxed text-slate-600">
               ログインして、今すぐ「増やす」「賢く使う」のアクションを開始しましょう。
             </p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-xs text-white/45">
+          <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4 text-xs text-slate-600">
             すでに登録済みの方は、このままログインしてダッシュボードへ。
           </div>
         </section>
@@ -69,11 +69,11 @@ export default function LoginPage() {
         <section className="flex flex-col justify-center py-6 md:py-0">
           <div className="mb-6 flex items-center gap-2.5 md:hidden">
             <div className="flex h-8 w-8 items-center justify-center rounded-xl gradient-gold text-lg">🐱</div>
-            <span className="text-base font-black text-white">マネコ</span>
+            <span className="text-base font-black text-slate-900">マネコ</span>
           </div>
           <div className="w-full max-w-md">
-          <h1 className="text-3xl font-black text-white mb-1">おかえり</h1>
-          <p className="text-white/40 text-sm mb-8">アカウントにログインしてください</p>
+          <h1 className="text-3xl font-black text-slate-900 mb-1">おかえり</h1>
+          <p className="text-slate-500 text-sm mb-8">アカウントにログインしてください</p>
 
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl p-3 mb-5 text-sm flex items-center gap-2">
@@ -84,7 +84,7 @@ export default function LoginPage() {
           {/* Googleログイン */}
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-3 glass py-3.5 rounded-2xl text-sm font-medium text-white hover:bg-white/10 transition-all mb-5"
+            className="w-full flex items-center justify-center gap-3 glass py-3.5 rounded-2xl text-sm font-medium text-slate-700 hover:bg-white transition-all mb-5"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -96,9 +96,9 @@ export default function LoginPage() {
           </button>
 
           <div className="flex items-center gap-3 mb-5">
-            <div className="flex-1 h-px bg-white/10" />
-            <span className="text-white/25 text-xs">または</span>
-            <div className="flex-1 h-px bg-white/10" />
+            <div className="flex-1 h-px bg-slate-200" />
+            <span className="text-slate-400 text-xs">または</span>
+            <div className="flex-1 h-px bg-slate-200" />
           </div>
 
           <form onSubmit={handleLogin} className="space-y-3">
@@ -110,7 +110,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="メールアドレス"
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-white/25 focus:outline-none focus:border-amber-500/50 focus:bg-white/8 transition-all"
+                className="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-400 transition-all"
               />
             </div>
 
@@ -122,12 +122,12 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="パスワード"
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-2xl pl-11 pr-11 py-3.5 text-sm text-white placeholder-white/25 focus:outline-none focus:border-amber-500/50 focus:bg-white/8 transition-all"
+                className="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-11 py-3.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-400 transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/50"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -144,7 +144,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-center text-white/30 text-xs mt-6">
+          <p className="text-center text-slate-500 text-xs mt-6">
             アカウントをお持ちでない方は{' '}
             <Link href="/register" className="text-amber-400 hover:text-amber-300 font-medium">
               新規登録
