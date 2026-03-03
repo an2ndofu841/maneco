@@ -3,20 +3,20 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Task, UserTask } from '@/types'
-import { Clock, Users, Star, CheckCircle, Camera, ChevronRight, Filter } from 'lucide-react'
+import { Clock, Users, Star, CheckCircle, Camera, ChevronRight } from 'lucide-react'
 import AppraisalModal from '@/components/earn/AppraisalModal'
 
 const CATEGORY_LABELS: Record<string, string> = {
   survey: 'アンケート',
-  review: '口コミ評価',
+  review: '口コミ',
   research: 'リサーチ',
   other: 'その他',
 }
 
-const DIFFICULTY_LABELS: Record<string, { label: string; color: string }> = {
-  easy: { label: 'かんたん', color: 'bg-green-100 text-green-700' },
-  medium: { label: 'ふつう', color: 'bg-yellow-100 text-yellow-700' },
-  hard: { label: 'むずかしい', color: 'bg-red-100 text-red-700' },
+const DIFFICULTY_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
+  easy: { label: 'かんたん', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+  medium: { label: 'ふつう', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
+  hard: { label: 'むずかしい', color: 'text-red-400', bg: 'bg-red-500/10 border-red-500/20' },
 }
 
 export default function EarnPage() {
@@ -24,22 +24,18 @@ export default function EarnPage() {
   const [userTasks, setUserTasks] = useState<UserTask[]>([])
   const [loading, setLoading] = useState(true)
   const [completing, setCompleting] = useState<string | null>(null)
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [selectedCategory, setSelectedCategory] = useState('all')
   const [showAppraisal, setShowAppraisal] = useState(false)
   const supabase = createClient()
 
-  useEffect(() => {
-    loadData()
-  }, [])
+  useEffect(() => { loadData() }, [])
 
   const loadData = async () => {
     const { data: { user } } = await supabase.auth.getUser()
-
     const [tasksRes, userTasksRes] = await Promise.all([
       supabase.from('tasks_b2b').select('*').eq('is_active', true).order('reward_points', { ascending: false }),
       user ? supabase.from('user_tasks').select('*').eq('user_id', user.id) : { data: [] },
     ])
-
     setTasks(tasksRes.data ?? [])
     setUserTasks((userTasksRes.data ?? []) as UserTask[])
     setLoading(false)
@@ -48,18 +44,9 @@ export default function EarnPage() {
   const handleStartTask = async (taskId: string) => {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
-
-    const { error } = await supabase.from('user_tasks').insert({
-      user_id: user.id,
-      task_id: taskId,
-      status: 'in_progress',
-    })
-
+    const { error } = await supabase.from('user_tasks').insert({ user_id: user.id, task_id: taskId, status: 'in_progress' })
     if (!error) {
-      setUserTasks((prev) => [
-        ...prev,
-        { id: '', user_id: user.id, task_id: taskId, status: 'in_progress', points_earned: 0, created_at: new Date().toISOString() },
-      ])
+      setUserTasks((prev) => [...prev, { id: '', user_id: user.id, task_id: taskId, status: 'in_progress', points_earned: 0, created_at: new Date().toISOString() }])
     }
   }
 
@@ -71,13 +58,8 @@ export default function EarnPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ taskId }),
       })
-
       if (res.ok) {
-        setUserTasks((prev) =>
-          prev.map((ut) =>
-            ut.task_id === taskId ? { ...ut, status: 'completed' } : ut
-          )
-        )
+        setUserTasks((prev) => prev.map((ut) => ut.task_id === taskId ? { ...ut, status: 'completed' } : ut))
         await loadData()
       }
     } finally {
@@ -85,60 +67,51 @@ export default function EarnPage() {
     }
   }
 
-  const getTaskStatus = (taskId: string) => {
-    return userTasks.find((ut) => ut.task_id === taskId)?.status
-  }
-
+  const getTaskStatus = (taskId: string) => userTasks.find((ut) => ut.task_id === taskId)?.status
   const categories = ['all', 'survey', 'review', 'research', 'other']
-
-  const filteredTasks = selectedCategory === 'all'
-    ? tasks
-    : tasks.filter((t) => t.category === selectedCategory)
-
-  const totalEarned = userTasks
-    .filter((ut) => ut.status === 'completed')
-    .reduce((sum, ut) => sum + (ut.points_earned || 0), 0)
+  const filteredTasks = selectedCategory === 'all' ? tasks : tasks.filter((t) => t.category === selectedCategory)
+  const totalEarned = userTasks.filter((ut) => ut.status === 'completed').reduce((sum, ut) => sum + (ut.points_earned || 0), 0)
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#0f0f14] flex items-center justify-center">
         <div className="text-center">
-          <div className="text-4xl animate-bounce mb-2">🐱</div>
-          <p className="text-gray-500 text-sm">案件を読み込み中...</p>
+          <div className="text-4xl animate-bounce mb-2">💸</div>
+          <p className="text-white/30 text-sm">案件を読み込み中...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* ヘッダー */}
-      <div className="bg-gradient-to-r from-emerald-400 to-teal-500 px-4 pt-12 pb-6">
-        <h1 className="text-white font-bold text-xl mb-1">💰 お金を増やす</h1>
-        <p className="text-white/80 text-sm">スキマ時間にサクッと稼ごう</p>
-        <div className="mt-4 bg-white/20 rounded-2xl p-4 flex items-center justify-between">
-          <div>
-            <p className="text-white/80 text-xs">今月の獲得ポイント</p>
-            <p className="text-white font-bold text-2xl">{totalEarned.toLocaleString()} pt</p>
-          </div>
-          <div className="text-4xl">🎯</div>
-        </div>
+    <div className="min-h-screen bg-[#0f0f14]">
+      {/* 背景 */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-emerald-500/6 rounded-full blur-[80px]" />
       </div>
 
-      <div className="px-4 py-4 space-y-4">
-        {/* 不用品査定ボタン */}
+      {/* ヘッダー */}
+      <div className="relative z-10 px-5 pt-14 pb-5">
+        <p className="text-white/40 text-xs mb-1">スキマ時間を活用</p>
+        <h1 className="text-white font-black text-2xl mb-1">お金を増やす 💸</h1>
+        <p className="text-white/30 text-sm">今月の獲得：<span className="text-emerald-400 font-bold">{totalEarned.toLocaleString()} pt</span></p>
+      </div>
+
+      <div className="relative z-10 px-4 space-y-4">
+        {/* 不用品査定バナー */}
         <button
           onClick={() => setShowAppraisal(true)}
-          className="w-full bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex items-center gap-4 hover:shadow-md transition-all"
+          className="w-full rounded-3xl p-4 border border-orange-500/20 flex items-center gap-4 hover:border-orange-500/40 transition-all active:scale-[0.98]"
+          style={{ background: 'linear-gradient(135deg, #1e1005 0%, #251408 100%)' }}
         >
-          <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-            <Camera className="w-6 h-6 text-orange-500" />
+          <div className="w-12 h-12 bg-orange-500/15 rounded-2xl flex items-center justify-center border border-orange-500/20 flex-shrink-0">
+            <Camera className="w-6 h-6 text-orange-400" />
           </div>
           <div className="flex-1 text-left">
-            <p className="font-bold text-gray-800">不用品をAI査定 📸</p>
-            <p className="text-gray-500 text-xs">写真を撮るだけで推定価格を即チェック！</p>
+            <p className="font-bold text-white text-sm">不用品をAI査定 📸</p>
+            <p className="text-white/40 text-xs">写真を撮るだけで推定売却価格をAIが瞬時に算出</p>
           </div>
-          <ChevronRight className="w-4 h-4 text-gray-400" />
+          <ChevronRight className="w-4 h-4 text-white/20 flex-shrink-0" />
         </button>
 
         {/* カテゴリフィルター */}
@@ -147,10 +120,10 @@ export default function EarnPage() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`flex-shrink-0 text-xs px-4 py-2 rounded-full font-medium transition-colors ${
+              className={`flex-shrink-0 text-xs px-4 py-2 rounded-full font-medium transition-all border ${
                 selectedCategory === cat
-                  ? 'bg-emerald-500 text-white'
-                  : 'bg-white text-gray-500 border border-gray-200'
+                  ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
+                  : 'text-white/30 border-white/10 hover:border-white/20'
               }`}
             >
               {cat === 'all' ? 'すべて' : CATEGORY_LABELS[cat]}
@@ -165,66 +138,67 @@ export default function EarnPage() {
             const isCompleted = status === 'completed'
             const isInProgress = status === 'in_progress'
             const remaining = task.max_participants - task.current_participants
-            const deadline = new Date(task.deadline)
-            const daysLeft = Math.ceil((deadline.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+            const daysLeft = Math.ceil((new Date(task.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+            const diff = DIFFICULTY_CONFIG[task.difficulty]
 
             return (
               <div
                 key={task.id}
-                className={`bg-white rounded-2xl p-4 border shadow-sm ${
-                  isCompleted ? 'border-emerald-200 bg-emerald-50/30' : 'border-gray-100'
+                className={`rounded-3xl p-4 border transition-all ${
+                  isCompleted
+                    ? 'border-emerald-500/20 opacity-60'
+                    : 'border-white/8 hover:border-white/15'
                 }`}
+                style={{ background: '#1a1a24' }}
               >
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1 pr-3">
+                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                      <span className="text-[10px] text-white/40 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full">
                         {CATEGORY_LABELS[task.category]}
                       </span>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${DIFFICULTY_LABELS[task.difficulty].color}`}>
-                        {DIFFICULTY_LABELS[task.difficulty].label}
+                      <span className={`text-[10px] border px-2 py-0.5 rounded-full ${diff.color} ${diff.bg}`}>
+                        {diff.label}
                       </span>
                       {isCompleted && (
-                        <span className="text-xs bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full flex items-center gap-1">
-                          <CheckCircle className="w-3 h-3" />完了
+                        <span className="text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <CheckCircle className="w-2.5 h-2.5" />完了
                         </span>
                       )}
                     </div>
-                    <h3 className="font-bold text-gray-800 text-sm">{task.title}</h3>
-                    <p className="text-gray-500 text-xs mt-1">{task.description}</p>
+                    <h3 className="font-bold text-white text-sm leading-snug">{task.title}</h3>
+                    <p className="text-white/35 text-xs mt-1 line-clamp-2">{task.description}</p>
                   </div>
-                  <div className="text-right ml-3 flex-shrink-0">
-                    <div className="flex items-center gap-1 text-amber-500">
-                      <Star className="w-4 h-4 fill-amber-500" />
-                      <span className="font-bold text-lg">{task.reward_points}</span>
+
+                  {/* ポイント */}
+                  <div className="text-right flex-shrink-0">
+                    <div className="flex items-center gap-1 justify-end">
+                      <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                      <span className="text-amber-400 font-black text-xl">{task.reward_points}</span>
                     </div>
-                    <p className="text-gray-400 text-xs">ポイント</p>
+                    <p className="text-white/25 text-[10px]">pt</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs text-gray-400 mb-3">
+                {/* メタ情報 */}
+                <div className="flex items-center gap-3 text-[11px] text-white/25 mb-3">
                   <span className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {task.estimated_minutes}分
+                    <Clock className="w-3 h-3" />{task.estimated_minutes}分
                   </span>
                   <span className="flex items-center gap-1">
-                    <Users className="w-3 h-3" />
-                    残り{remaining}枠
+                    <Users className="w-3 h-3" />残り{remaining}枠
                   </span>
-                  <span className={daysLeft <= 3 ? 'text-red-400 font-medium' : ''}>
+                  <span className={daysLeft <= 3 ? 'text-red-400' : ''}>
                     {daysLeft <= 0 ? '終了' : `あと${daysLeft}日`}
                   </span>
                   <span className="ml-auto">{task.company_name}</span>
                 </div>
 
+                {/* 応募状況バー */}
                 <div className="mb-3">
-                  <div className="flex justify-between text-xs text-gray-400 mb-1">
-                    <span>応募状況</span>
-                    <span>{task.current_participants} / {task.max_participants}</span>
-                  </div>
-                  <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-1 bg-white/8 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full"
+                      className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"
                       style={{ width: `${(task.current_participants / task.max_participants) * 100}%` }}
                     />
                   </div>
@@ -234,12 +208,12 @@ export default function EarnPage() {
                   <button
                     onClick={() => isInProgress ? handleCompleteTask(task.id) : handleStartTask(task.id)}
                     disabled={completing === task.id || remaining <= 0}
-                    className={`w-full py-2.5 rounded-xl text-sm font-bold transition-all ${
+                    className={`w-full py-2.5 rounded-2xl text-sm font-bold transition-all border ${
                       isInProgress
-                        ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:shadow-md'
+                        ? 'gradient-gold text-black border-transparent'
                         : remaining <= 0
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-emerald-400 to-teal-500 text-white hover:shadow-md'
+                        ? 'text-white/20 border-white/8 cursor-not-allowed'
+                        : 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20'
                     }`}
                   >
                     {completing === task.id ? '処理中...' :
@@ -252,6 +226,8 @@ export default function EarnPage() {
             )
           })}
         </div>
+
+        <div className="h-4" />
       </div>
 
       {showAppraisal && <AppraisalModal onClose={() => setShowAppraisal(false)} />}
