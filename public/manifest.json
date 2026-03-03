@@ -1,0 +1,24 @@
+{
+  "name": "マネコ - AIマネーコンシェルジュ",
+  "short_name": "マネコ",
+  "description": "お金の「どうしよう？」を0秒で解決するAIコンシェルジュ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fffbeb",
+  "theme_color": "#f59e0b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["finance", "utilities"],
+  "lang": "ja"
+}

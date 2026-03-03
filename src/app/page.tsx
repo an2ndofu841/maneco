@@ -1,65 +1,113 @@
-import Image from "next/image";
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+import Link from 'next/link'
 
-export default function Home() {
+export default async function HomePage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (user) redirect('/dashboard')
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
+      {/* ヒーロー */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 to-orange-500/10" />
+        <div className="relative px-6 pt-20 pb-12 text-center">
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl shadow-xl mb-6">
+            <span className="text-5xl">🐱</span>
+          </div>
+          <h1 className="text-4xl font-black text-gray-800 mb-2">マネコ</h1>
+          <p className="text-gray-500 text-sm mb-6">招き猫AIコンシェルジュ</p>
+
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg mb-8 text-left">
+            <p className="text-gray-700 font-bold text-lg leading-relaxed mb-4">
+              金欠から資産形成まで。<br />
+              お金の「どうしよう？」を<br />
+              <span className="text-amber-500">0秒で解決</span>するAIコンシェルジュ
+            </p>
+            <div className="space-y-2">
+              {[
+                '💰 スキマ時間にサクッと稼ぐ',
+                '🎯 AIが予算内の旅行プランを作成',
+                '🛍️ パーソナライズされたクーポン',
+                '🎮 キャラ育成でモチベUP！',
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-2 text-sm text-gray-600">
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <Link
+              href="/register"
+              className="block w-full bg-gradient-to-r from-amber-400 to-orange-500 text-white py-4 rounded-2xl font-black text-lg shadow-lg hover:shadow-xl transition-all"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              無料で始める →
+            </Link>
+            <Link
+              href="/login"
+              className="block w-full bg-white border border-gray-200 text-gray-700 py-4 rounded-2xl font-bold text-base hover:bg-gray-50 transition-all"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              ログイン
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
+
+      {/* 機能紹介 */}
+      <div className="px-6 py-8 space-y-4">
+        <h2 className="text-xl font-bold text-gray-800 text-center mb-6">マネコでできること</h2>
+
+        {[
+          {
+            emoji: '🤖',
+            title: 'AIコンシェルジュ',
+            desc: '「今月ピンチ」と話しかけるだけ。AIが状況を理解して最適なアクションを提案します。',
+            color: 'from-amber-50 to-orange-50 border-amber-200',
+          },
+          {
+            emoji: '💸',
+            title: 'スキマ時間で稼ぐ',
+            desc: 'アンケートや口コミ案件に答えてポイントGET。不用品をAI査定して今日売ろう！',
+            color: 'from-emerald-50 to-teal-50 border-emerald-200',
+          },
+          {
+            emoji: '✈️',
+            title: 'AIトラベルプランナー',
+            desc: '予算・日数を入れるだけで最適な旅行プランを自動生成。節約ヒント付き！',
+            color: 'from-violet-50 to-purple-50 border-violet-200',
+          },
+          {
+            emoji: '🎮',
+            title: 'キャラ育成ゲーム',
+            desc: '節約・稼働するたびにキャラが成長。毎日開くモチベーションをゲーム感覚で。',
+            color: 'from-blue-50 to-indigo-50 border-blue-200',
+          },
+        ].map(({ emoji, title, desc, color }) => (
+          <div key={title} className={`bg-gradient-to-br ${color} rounded-2xl p-4 border`}>
+            <div className="flex items-start gap-3">
+              <span className="text-3xl">{emoji}</span>
+              <div>
+                <h3 className="font-bold text-gray-800 mb-1">{title}</h3>
+                <p className="text-gray-500 text-sm">{desc}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="px-6 pb-12">
+        <Link
+          href="/register"
+          className="block w-full bg-gradient-to-r from-amber-400 to-orange-500 text-white py-4 rounded-2xl font-black text-lg shadow-lg text-center"
+        >
+          今すぐ無料登録 🐱
+        </Link>
+        <p className="text-center text-xs text-gray-400 mt-3">クレジットカード不要・登録30秒</p>
+      </div>
     </div>
-  );
+  )
 }
