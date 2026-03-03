@@ -58,21 +58,40 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0f14] flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-[#0f0f14] overflow-hidden">
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-[-30%] right-[-10%] w-[400px] h-[400px] bg-amber-500/8 rounded-full blur-[100px]" />
         <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] bg-orange-500/6 rounded-full blur-[80px]" />
       </div>
 
-      <div className="relative z-10 flex items-center gap-2.5 px-6 pt-14 pb-4">
-        <div className="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center text-lg">
-          🐱
-        </div>
-        <span className="font-black text-white text-base">マネコ</span>
-      </div>
+      <div className="relative z-10 mx-auto grid min-h-screen w-full max-w-6xl grid-cols-1 px-6 py-8 md:grid-cols-2 md:gap-10 md:px-10">
+        <section className="hidden flex-col justify-between rounded-3xl border border-white/8 bg-[#181823] p-8 md:flex">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-gold text-lg">🐱</div>
+            <span className="text-base font-black text-white">マネコ</span>
+          </div>
+          <div>
+            <p className="mb-2 text-xs text-amber-300/80">GET STARTED</p>
+            <h2 className="text-3xl font-black leading-tight text-white">
+              無理なく続く
+              <br />
+              <span className="gradient-gold-text">マネープラン習慣</span>
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-white/50">
+              登録後すぐに、AIコンシェルジュがあなた向けの節約・収益アクションを提案します。
+            </p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-xs text-white/45">
+            すでにアカウントをお持ちならログインから再開できます。
+          </div>
+        </section>
 
-      <div className="relative z-10 flex-1 flex flex-col justify-center px-6 py-8">
-        <div className="max-w-sm mx-auto w-full">
+        <section className="flex flex-col justify-center py-6 md:py-0">
+          <div className="mb-6 flex items-center gap-2.5 md:hidden">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl gradient-gold text-lg">🐱</div>
+            <span className="text-base font-black text-white">マネコ</span>
+          </div>
+          <div className="w-full max-w-md">
           <h1 className="text-3xl font-black text-white mb-1">はじめまして</h1>
           <p className="text-white/40 text-sm mb-8">30秒で登録完了！無料で全機能使えます</p>
 
@@ -144,7 +163,8 @@ export default function RegisterPage() {
               ログイン
             </Link>
           </p>
-        </div>
+          </div>
+        </section>
       </div>
     </div>
   )

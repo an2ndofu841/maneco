@@ -91,13 +91,13 @@ export default function EarnPage() {
       </div>
 
       {/* ヘッダー */}
-      <div className="relative z-10 px-5 pt-14 pb-5">
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-5 pb-5 pt-14 md:px-0 md:pt-10">
         <p className="text-white/40 text-xs mb-1">スキマ時間を活用</p>
-        <h1 className="text-white font-black text-2xl mb-1">お金を増やす 💸</h1>
+        <h1 className="text-white font-black text-2xl mb-1 md:text-3xl">お金を増やす 💸</h1>
         <p className="text-white/30 text-sm">今月の獲得：<span className="text-emerald-400 font-bold">{totalEarned.toLocaleString()} pt</span></p>
       </div>
 
-      <div className="relative z-10 px-4 space-y-4">
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-4 space-y-4 md:px-0">
         {/* 不用品査定バナー */}
         <button
           onClick={() => setShowAppraisal(true)}
@@ -132,7 +132,7 @@ export default function EarnPage() {
         </div>
 
         {/* 案件リスト */}
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {filteredTasks.map((task) => {
             const status = getTaskStatus(task.id)
             const isCompleted = status === 'completed'

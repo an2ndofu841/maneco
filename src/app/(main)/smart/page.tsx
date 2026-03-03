@@ -52,9 +52,9 @@ export default function SmartPage() {
       </div>
 
       {/* ヘッダー */}
-      <div className="relative z-10 px-5 pt-14 pb-4">
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-5 pb-4 pt-14 md:px-0 md:pt-10">
         <p className="text-white/40 text-xs mb-1">お得に賢く</p>
-        <h1 className="text-white font-black text-2xl mb-4">賢く使う 🛍️</h1>
+        <h1 className="text-white font-black text-2xl mb-4 md:text-3xl">賢く使う 🛍️</h1>
 
         {/* タブ */}
         <div className="flex bg-white/5 rounded-2xl p-1 border border-white/8">
@@ -83,7 +83,7 @@ export default function SmartPage() {
         </div>
       </div>
 
-      <div className="relative z-10 px-4">
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-4 md:px-0">
         {activeTab === 'coupon' ? (
           <div className="space-y-4">
             {/* 検索 */}
@@ -125,7 +125,7 @@ export default function SmartPage() {
                 <div className="text-3xl animate-bounce">🛍️</div>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                 {filteredCoupons.map((coupon) => {
                   const daysLeft = getDaysLeft(coupon.valid_until)
                   const isExpiringSoon = daysLeft <= 7

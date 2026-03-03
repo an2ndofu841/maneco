@@ -79,7 +79,7 @@ export default function ProfilePage() {
       </div>
 
       {/* プロフィールヘッダー */}
-      <div className="relative z-10 px-5 pt-16 pb-6 text-center">
+      <div className="relative z-10 mx-auto w-full max-w-4xl px-5 pb-6 pt-16 text-center md:px-0 md:pt-10">
         <div className="relative inline-block mb-3">
           <div className="w-20 h-20 rounded-3xl flex items-center justify-center text-4xl mx-auto animate-float"
             style={{ background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.25)' }}>
@@ -100,11 +100,11 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="relative z-10 px-4 space-y-4">
+      <div className="relative z-10 mx-auto w-full max-w-4xl space-y-4 px-4 md:px-0">
         {!editing ? (
           <>
             {/* 実績 */}
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-2 md:gap-3">
               {[
                 { label: '保有pt', value: `${user.total_points.toLocaleString()}`, color: 'text-amber-400' },
                 { label: '節約額', value: `¥${user.total_savings.toLocaleString()}`, color: 'text-emerald-400' },
