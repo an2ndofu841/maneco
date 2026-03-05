@@ -30,6 +30,130 @@ const MOCK_LOCATIONS = [
   { lat: 35.6812, lng: 139.7671, address: '千代田区' },
 ]
 
+// Dummy coupons for demo
+const DUMMY_COUPONS: Coupon[] = [
+  {
+    id: 'd1',
+    title: '全品10%OFFクーポン',
+    description: 'ランチタイム限定！お会計から10%OFFになります。',
+    discount_type: 'percentage',
+    discount_value: 10,
+    category: 'food',
+    brand_name: 'カフェ・ド・マネコ',
+    valid_until: '2026-12-31',
+    affiliate_url: 'https://example.com',
+    is_active: true,
+    created_at: new Date().toISOString(),
+    approx_price: 1200,
+    location: { lat: 35.6895, lng: 139.6917, address: '新宿区' }
+  },
+  {
+    id: 'd2',
+    title: '初回限定500円OFF',
+    description: '3000円以上のお買い上げで500円OFF。',
+    discount_type: 'fixed',
+    discount_value: 500,
+    category: 'shopping',
+    brand_name: 'マネコドラッグ',
+    valid_until: '2026-11-30',
+    affiliate_url: 'https://example.com',
+    is_active: true,
+    created_at: new Date().toISOString(),
+    approx_price: 3500,
+    location: { lat: 35.6586, lng: 139.7454, address: '港区' }
+  },
+  {
+    id: 'd3',
+    title: '映画鑑賞券 1200円',
+    description: '通常1900円のところ、いつでも1200円で鑑賞できます。',
+    discount_type: 'fixed',
+    discount_value: 700,
+    category: 'travel',
+    brand_name: 'シネマ・マネコ',
+    valid_until: '2026-10-31',
+    affiliate_url: 'https://example.com',
+    is_active: true,
+    created_at: new Date().toISOString(),
+    approx_price: 1900,
+    location: { lat: 35.6284, lng: 139.7387, address: '品川区' }
+  },
+  {
+    id: 'd4',
+    title: 'スマホ料金3ヶ月無料',
+    description: '新規契約で基本料金が3ヶ月無料になります。',
+    discount_type: 'fixed',
+    discount_value: 9000,
+    category: 'telecom',
+    brand_name: 'マネコモバイル',
+    valid_until: '2026-09-30',
+    affiliate_url: 'https://example.com',
+    is_active: true,
+    created_at: new Date().toISOString(),
+    approx_price: 3000,
+    location: { lat: 35.7023, lng: 139.7745, address: '台東区' }
+  },
+  {
+    id: 'd5',
+    title: '温泉旅館 20%OFF',
+    description: '平日限定！人気の温泉旅館が20%OFFで宿泊できます。',
+    discount_type: 'percentage',
+    discount_value: 20,
+    category: 'travel',
+    brand_name: '湯の宿マネコ',
+    valid_until: '2026-12-15',
+    affiliate_url: 'https://example.com',
+    is_active: true,
+    created_at: new Date().toISOString(),
+    approx_price: 25000,
+    location: { lat: 35.6812, lng: 139.7671, address: '千代田区' }
+  },
+  {
+    id: 'd6',
+    title: '投資信託 手数料無料',
+    description: 'NISA口座開設で、対象ファンドの購入手数料が無料。',
+    discount_type: 'fixed',
+    discount_value: 3300,
+    category: 'investment',
+    brand_name: 'マネコ証券',
+    valid_until: '2026-08-31',
+    affiliate_url: 'https://example.com',
+    is_active: true,
+    created_at: new Date().toISOString(),
+    approx_price: 100000,
+    location: { lat: 35.6895, lng: 139.6917, address: '新宿区' }
+  },
+  {
+    id: 'd7',
+    title: '焼肉食べ放題 1000円OFF',
+    description: '4名様以上のご予約で、お一人様1000円OFF。',
+    discount_type: 'fixed',
+    discount_value: 1000,
+    category: 'food',
+    brand_name: '焼肉マネコ苑',
+    valid_until: '2026-12-31',
+    affiliate_url: 'https://example.com',
+    is_active: true,
+    created_at: new Date().toISOString(),
+    approx_price: 5000,
+    location: { lat: 35.6586, lng: 139.7454, address: '港区' }
+  },
+  {
+    id: 'd8',
+    title: 'ふるさと納税 ポイント還元',
+    description: '寄付金額の最大10%をポイント還元。',
+    discount_type: 'percentage',
+    discount_value: 10,
+    category: 'tax',
+    brand_name: 'さとマネ',
+    valid_until: '2026-12-31',
+    affiliate_url: 'https://example.com',
+    is_active: true,
+    created_at: new Date().toISOString(),
+    approx_price: 30000,
+    location: { lat: 35.6284, lng: 139.7387, address: '品川区' }
+  }
+]
+
 export default function SmartPage() {
   const [activeTab, setActiveTab] = useState<'coupon' | 'travel'>('coupon')
   const [coupons, setCoupons] = useState<Coupon[]>([])
@@ -77,14 +201,21 @@ export default function SmartPage() {
   const loadCoupons = async () => {
     const { data } = await supabase.from('coupons').select('*').eq('is_active', true).order('created_at', { ascending: false })
     
-    // Mock additional data for demo
-    const enhancedCoupons = (data ?? []).map((c: any) => ({
-      ...c,
-      approx_price: Math.floor(Math.random() * 5000) + 500, // 500 - 5500 yen
-      location: MOCK_LOCATIONS[Math.floor(Math.random() * MOCK_LOCATIONS.length)]
-    }))
+    let loadedCoupons: Coupon[] = []
+
+    if (data && data.length > 0) {
+      // Mock additional data for real coupons
+      loadedCoupons = data.map((c: any) => ({
+        ...c,
+        approx_price: Math.floor(Math.random() * 5000) + 500,
+        location: MOCK_LOCATIONS[Math.floor(Math.random() * MOCK_LOCATIONS.length)]
+      }))
+    } else {
+      // Use dummy coupons if DB is empty
+      loadedCoupons = DUMMY_COUPONS
+    }
     
-    setCoupons(enhancedCoupons as Coupon[])
+    setCoupons(loadedCoupons)
     setLoading(false)
   }
 
