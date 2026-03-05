@@ -65,30 +65,38 @@ export interface Coupon {
   affiliate_url: string
   is_active: boolean
   created_at: string
+  // New fields for enhanced filtering
+  approx_price?: number
+  location?: {
+    lat: number
+    lng: number
+    address?: string
+  }
 }
 
 export interface TravelPlan {
+  plan_title: string
+  departure: string
   destination: string
   budget: number
-  days: number
+  total_estimated_cost: number
+  transportation: {
+    type: string
+    cost: number
+    details: string
+    booking_url: string
+  }
+  scores: {
+    comfort: number
+    excitement: number
+    cost_performance: number
+    overall: number
+  }
+  compromise_points: { title: string; description: string }[]
   itinerary: {
     day: number
-    activities: {
-      time: string
-      activity: string
-      cost: number
-      tip: string
-    }[]
-    accommodation: {
-      name: string
-      cost: number
-    }
+    activities: { time: string; activity: string; cost: number; tip: string }[]
+    accommodation: { name: string; cost: number; booking_url: string }
   }[]
-  total_estimated_cost: number
   saving_tips: string[]
-  recommended_booking_sites: {
-    name: string
-    url: string
-    discount_info: string
-  }[]
 }

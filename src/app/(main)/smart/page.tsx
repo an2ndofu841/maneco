@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Coupon } from '@/types'
 import TravelPlanner from '@/components/smart/TravelPlanner'
-import { Plane, Tag, ExternalLink, Search } from 'lucide-react'
+import { Plane, Tag, ExternalLink, Search, Utensils, ShoppingBag, Palmtree, MapPin, SlidersHorizontal, X } from 'lucide-react'
 
 const COUPON_CATEGORY_CONFIG: Record<string, { label: string; emoji: string; color: string; bg: string }> = {
   travel: { label: '旅行', emoji: '✈️', color: 'text-blue-600', bg: 'bg-blue-50 border-blue-100' },
@@ -15,29 +15,113 @@ const COUPON_CATEGORY_CONFIG: Record<string, { label: string; emoji: string; col
   investment: { label: '投資', emoji: '📈', color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-100' },
 }
 
+const USAGE_TYPES = [
+  { id: 'food', label: 'ご飯', icon: Utensils, color: 'bg-orange-500', categories: ['food'] },
+  { id: 'daily', label: '日用品', icon: ShoppingBag, color: 'bg-pink-500', categories: ['shopping', 'telecom', 'tax', 'investment'] },
+  { id: 'leisure', label: 'レジャー', icon: Palmtree, color: 'bg-blue-500', categories: ['travel'] },
+]
+
+// Mock locations for demo purposes (Tokyo area)
+const MOCK_LOCATIONS = [
+  { lat: 35.6895, lng: 139.6917, address: '新宿区' },
+  { lat: 35.6586, lng: 139.7454, address: '港区' },
+  { lat: 35.6284, lng: 139.7387, address: '品川区' },
+  { lat: 35.7023, lng: 139.7745, address: '台東区' },
+  { lat: 35.6812, lng: 139.7671, address: '千代田区' },
+]
+
 export default function SmartPage() {
   const [activeTab, setActiveTab] = useState<'coupon' | 'travel'>('coupon')
   const [coupons, setCoupons] = useState<Coupon[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedCategory, setSelectedCategory] = useState('all')
+  
+  // Filters
+  const [selectedUsage, setSelectedUsage] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [maxBudget, setMaxBudget] = useState<number | null>(null)
+  const [useLocation, setUseLocation] = useState(false)
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [showFilters, setShowFilters] = useState(false)
+
   const supabase = createClient()
 
   useEffect(() => { loadCoupons() }, [])
 
+  // Get user location
+  useEffect(() => {
+    if (useLocation && !userLocation) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setUserLocation({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            })
+          },
+          (error) => {
+            console.error('Error getting location:', error)
+            setUseLocation(false)
+            alert('位置情報の取得に失敗しました。設定をご確認ください。')
+          }
+        )
+      } else {
+        alert('お使いのブラウザは位置情報をサポートしていません。')
+        setUseLocation(false)
+      }
+    }
+  }, [useLocation, userLocation])
+
   const loadCoupons = async () => {
     const { data } = await supabase.from('coupons').select('*').eq('is_active', true).order('created_at', { ascending: false })
-    setCoupons((data ?? []) as Coupon[])
+    
+    // Mock additional data for demo
+    const enhancedCoupons = (data ?? []).map((c: any) => ({
+      ...c,
+      approx_price: Math.floor(Math.random() * 5000) + 500, // 500 - 5500 yen
+      location: MOCK_LOCATIONS[Math.floor(Math.random() * MOCK_LOCATIONS.length)]
+    }))
+    
+    setCoupons(enhancedCoupons as Coupon[])
     setLoading(false)
   }
 
-  const filteredCoupons = coupons.filter((c) => {
-    const matchCategory = selectedCategory === 'all' || c.category === selectedCategory
-    const matchSearch = !searchQuery || c.title.includes(searchQuery) || c.brand_name.includes(searchQuery)
-    return matchCategory && matchSearch
-  })
+  // Haversine formula to calculate distance in km
+  const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => {
+    const R = 6371 // Earth radius in km
+    const dLat = (lat2 - lat1) * (Math.PI / 180)
+    const dLng = (lng2 - lng1) * (Math.PI / 180)
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLng / 2) * Math.sin(dLng / 2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    return R * c
+  }
 
-  const categories = ['all', ...Array.from(new Set(coupons.map((c) => c.category)))]
+  const filteredCoupons = coupons.filter((c) => {
+    // Usage Filter
+    if (selectedUsage) {
+      const usage = USAGE_TYPES.find(u => u.id === selectedUsage)
+      if (usage && !usage.categories.includes(c.category)) return false
+    }
+
+    // Search Query
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase()
+      if (!c.title.toLowerCase().includes(query) && !c.brand_name.toLowerCase().includes(query)) return false
+    }
+
+    // Budget Filter
+    if (maxBudget && c.approx_price && c.approx_price > maxBudget) return false
+
+    // Location Filter (within 5km)
+    if (useLocation && userLocation && c.location) {
+      const distance = calculateDistance(userLocation.lat, userLocation.lng, c.location.lat, c.location.lng)
+      if (distance > 5) return false
+    }
+
+    return true
+  })
 
   const getDaysLeft = (dateStr: string) =>
     Math.ceil((new Date(dateStr).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
@@ -54,7 +138,7 @@ export default function SmartPage() {
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">賢く使う 🛍️</h1>
 
           {/* タブ */}
-          <div className="flex bg-slate-100 p-1 rounded-2xl max-w-md">
+          <div className="flex bg-slate-100 p-1 rounded-2xl max-w-md mb-6">
             <button
               onClick={() => setActiveTab('coupon')}
               className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${
@@ -82,38 +166,113 @@ export default function SmartPage() {
 
         {activeTab === 'coupon' ? (
           <div className="space-y-6">
-            {/* 検索 & フィルター */}
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="クーポンを検索..."
-                  className="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                />
-              </div>
+            {/* 用途選択（大カテゴリ） */}
+            <div className="grid grid-cols-3 gap-3">
+              {USAGE_TYPES.map((usage) => (
+                <button
+                  key={usage.id}
+                  onClick={() => setSelectedUsage(selectedUsage === usage.id ? null : usage.id)}
+                  className={`relative overflow-hidden rounded-2xl p-4 h-28 flex flex-col items-center justify-center gap-2 transition-all ${
+                    selectedUsage === usage.id
+                      ? 'ring-4 ring-indigo-200 scale-[1.02]'
+                      : 'hover:scale-[1.02]'
+                  }`}
+                >
+                  <div className={`absolute inset-0 ${usage.color} opacity-10`} />
+                  <div className={`w-10 h-10 rounded-full ${usage.color} text-white flex items-center justify-center shadow-md`}>
+                    <usage.icon className="w-5 h-5" />
+                  </div>
+                  <span className="font-bold text-slate-900 text-sm">{usage.label}</span>
+                  {selectedUsage === usage.id && (
+                    <div className="absolute top-2 right-2 w-2 h-2 bg-indigo-500 rounded-full" />
+                  )}
+                </button>
+              ))}
             </div>
 
-            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-              {categories.map((cat) => {
-                const config = COUPON_CATEGORY_CONFIG[cat]
-                return (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`flex-shrink-0 text-xs px-4 py-2 rounded-full border font-bold transition-all flex items-center gap-1.5 ${
-                      selectedCategory === cat
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-md'
-                        : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
-                    }`}
-                  >
-                    {cat !== 'all' && config?.emoji}
-                    {cat === 'all' ? 'すべて' : config?.label ?? cat}
-                  </button>
-                )
-              })}
+            {/* 検索 & フィルターバー */}
+            <div className="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm">
+              <div className="flex gap-3 mb-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="お店やブランド名で検索..."
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                  />
+                </div>
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className={`flex items-center justify-center w-12 h-12 rounded-xl border transition-all ${
+                    showFilters || maxBudget || useLocation
+                      ? 'bg-indigo-50 border-indigo-200 text-indigo-600'
+                      : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'
+                  }`}
+                >
+                  <SlidersHorizontal className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* 詳細フィルター */}
+              {(showFilters || maxBudget || useLocation) && (
+                <div className="space-y-4 pt-2 border-t border-slate-100 animate-fade-in">
+                  {/* 予算フィルター */}
+                  <div>
+                    <div className="flex justify-between text-xs font-bold text-slate-500 mb-2">
+                      <span>予算（クーポン適用後）</span>
+                      {maxBudget && <span className="text-indigo-600">¥{maxBudget.toLocaleString()}以下</span>}
+                    </div>
+                    <div className="flex gap-2 flex-wrap">
+                      {[1000, 3000, 5000, 10000].map((price) => (
+                        <button
+                          key={price}
+                          onClick={() => setMaxBudget(maxBudget === price ? null : price)}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
+                            maxBudget === price
+                              ? 'bg-indigo-600 text-white border-indigo-600'
+                              : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
+                          }`}
+                        >
+                          ¥{price.toLocaleString()}
+                        </button>
+                      ))}
+                      {maxBudget && (
+                        <button
+                          onClick={() => setMaxBudget(null)}
+                          className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-600 flex items-center gap-1"
+                        >
+                          <X className="w-3 h-3" /> クリア
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 現在地フィルター */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${useLocation ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
+                        <MapPin className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-slate-900">現在地周辺のお店</p>
+                        <p className="text-xs text-slate-500">5km以内のクーポンを表示</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setUseLocation(!useLocation)}
+                      className={`w-12 h-7 rounded-full transition-colors relative ${
+                        useLocation ? 'bg-emerald-500' : 'bg-slate-200'
+                      }`}
+                    >
+                      <div className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${
+                        useLocation ? 'translate-x-5' : 'translate-x-0'
+                      }`} />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* クーポン一覧 */}
@@ -143,9 +302,19 @@ export default function SmartPage() {
                               <span className={`text-[10px] font-bold border px-2 py-0.5 rounded-full ${catConfig?.color} ${catConfig?.bg}`}>
                                 {catConfig?.emoji} {catConfig?.label}
                               </span>
+                              {coupon.approx_price && (
+                                <span className="text-[10px] text-slate-400 font-medium">
+                                  目安: ¥{coupon.approx_price.toLocaleString()}
+                                </span>
+                              )}
                             </div>
                             <p className="text-slate-400 text-[10px] font-bold mb-0.5">{coupon.brand_name}</p>
                             <h3 className="font-bold text-slate-900 text-sm leading-snug line-clamp-2">{coupon.title}</h3>
+                            {coupon.location?.address && (
+                              <p className="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+                                <MapPin className="w-3 h-3" /> {coupon.location.address}
+                              </p>
+                            )}
                           </div>
 
                           <div className="flex items-end justify-between mt-3">
@@ -172,6 +341,17 @@ export default function SmartPage() {
                     <p className="text-4xl mb-3">🔍</p>
                     <p className="text-slate-500 font-medium">クーポンが見つかりません</p>
                     <p className="text-slate-400 text-sm mt-1">条件を変えて検索してみてください</p>
+                    <button 
+                      onClick={() => {
+                        setSelectedUsage(null)
+                        setSearchQuery('')
+                        setMaxBudget(null)
+                        setUseLocation(false)
+                      }}
+                      className="mt-4 text-indigo-600 text-xs font-bold hover:underline"
+                    >
+                      フィルターをリセット
+                    </button>
                   </div>
                 )}
               </div>
