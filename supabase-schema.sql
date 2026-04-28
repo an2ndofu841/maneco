@@ -88,37 +88,47 @@ ALTER TABLE public.user_tasks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.coupons ENABLE ROW LEVEL SECURITY;
 
 -- Users RLS
+DROP POLICY IF EXISTS "ユーザーは自分のプロフィールのみ参照可" ON public.users;
 CREATE POLICY "ユーザーは自分のプロフィールのみ参照可" ON public.users
   FOR SELECT USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "ユーザーは自分のプロフィールのみ更新可" ON public.users;
 CREATE POLICY "ユーザーは自分のプロフィールのみ更新可" ON public.users
   FOR UPDATE USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "新規ユーザー作成可" ON public.users;
 CREATE POLICY "新規ユーザー作成可" ON public.users
   FOR INSERT WITH CHECK (auth.uid() = id);
 
 -- Chat_History RLS
+DROP POLICY IF EXISTS "ユーザーは自分のチャット履歴のみ参照可" ON public.chat_history;
 CREATE POLICY "ユーザーは自分のチャット履歴のみ参照可" ON public.chat_history
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "ユーザーは自分のチャット履歴を作成可" ON public.chat_history;
 CREATE POLICY "ユーザーは自分のチャット履歴を作成可" ON public.chat_history
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- Tasks_B2B RLS（全ユーザー参照可）
+DROP POLICY IF EXISTS "全ユーザーが案件を参照可" ON public.tasks_b2b;
 CREATE POLICY "全ユーザーが案件を参照可" ON public.tasks_b2b
   FOR SELECT USING (is_active = TRUE);
 
 -- User_Tasks RLS
+DROP POLICY IF EXISTS "ユーザーは自分のタスク履歴のみ参照可" ON public.user_tasks;
 CREATE POLICY "ユーザーは自分のタスク履歴のみ参照可" ON public.user_tasks
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "ユーザーは自分のタスクを作成可" ON public.user_tasks;
 CREATE POLICY "ユーザーは自分のタスクを作成可" ON public.user_tasks
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "ユーザーは自分のタスクを更新可" ON public.user_tasks;
 CREATE POLICY "ユーザーは自分のタスクを更新可" ON public.user_tasks
   FOR UPDATE USING (auth.uid() = user_id);
 
 -- Coupons RLS（全ユーザー参照可）
+DROP POLICY IF EXISTS "全ユーザーがクーポンを参照可" ON public.coupons;
 CREATE POLICY "全ユーザーがクーポンを参照可" ON public.coupons
   FOR SELECT USING (is_active = TRUE);
 
@@ -201,6 +211,60 @@ BEGIN
   WHERE id = p_user_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Point_Offersテーブル（ポイント案件マスタ）
+CREATE TABLE IF NOT EXISTS public.point_offers (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title TEXT NOT NULL,
+  brand TEXT NOT NULL,
+  description TEXT NOT NULL,
+  points INTEGER NOT NULL DEFAULT 0,
+  category TEXT NOT NULL,
+  category_label TEXT NOT NULL,
+  category_emoji TEXT NOT NULL DEFAULT '',
+  conditions TEXT[] DEFAULT '{}',
+  time_estimate TEXT NOT NULL DEFAULT '',
+  difficulty TEXT NOT NULL DEFAULT 'easy' CHECK (difficulty IN ('easy', 'medium', 'hard')),
+  popular BOOLEAN DEFAULT FALSE,
+  limited BOOLEAN DEFAULT FALSE,
+  gradient TEXT NOT NULL DEFAULT 'from-blue-500 to-indigo-600',
+  url TEXT NOT NULL DEFAULT '#',
+  is_active BOOLEAN DEFAULT TRUE,
+  sort_order INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Articlesテーブル（学習記事マスタ）
+CREATE TABLE IF NOT EXISTS public.articles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug TEXT NOT NULL UNIQUE,
+  title TEXT NOT NULL,
+  subtitle TEXT NOT NULL,
+  emoji TEXT NOT NULL DEFAULT '',
+  icon_name TEXT NOT NULL DEFAULT 'BookOpen',
+  read_minutes INTEGER NOT NULL DEFAULT 5,
+  level TEXT NOT NULL DEFAULT 'beginner' CHECK (level IN ('beginner', 'intermediate', 'advanced')),
+  gradient TEXT NOT NULL DEFAULT 'from-blue-500 to-indigo-600',
+  exp_reward INTEGER NOT NULL DEFAULT 20,
+  badge_emoji TEXT NOT NULL DEFAULT '',
+  badge_title TEXT NOT NULL DEFAULT '',
+  content JSONB NOT NULL DEFAULT '[]',
+  key_takeaway TEXT NOT NULL DEFAULT '',
+  is_active BOOLEAN DEFAULT TRUE,
+  sort_order INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.point_offers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.articles ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "全ユーザーがポイント案件を参照可" ON public.point_offers;
+CREATE POLICY "全ユーザーがポイント案件を参照可" ON public.point_offers
+  FOR SELECT USING (is_active = TRUE);
+
+DROP POLICY IF EXISTS "全ユーザーが記事を参照可" ON public.articles;
+CREATE POLICY "全ユーザーが記事を参照可" ON public.articles
+  FOR SELECT USING (is_active = TRUE);
 
 -- ========================================
 -- サンプルデータ

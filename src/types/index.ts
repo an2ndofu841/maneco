@@ -74,6 +74,47 @@ export interface Coupon {
   }
 }
 
+export interface PointOffer {
+  id: string
+  title: string
+  brand: string
+  description: string
+  points: number
+  category: string
+  category_label: string
+  category_emoji: string
+  conditions: string[]
+  time_estimate: string
+  difficulty: 'easy' | 'medium' | 'hard'
+  popular: boolean
+  limited: boolean
+  gradient: string
+  url: string
+  is_active: boolean
+  sort_order: number
+  created_at: string
+}
+
+export interface Article {
+  id: string
+  slug: string
+  title: string
+  subtitle: string
+  emoji: string
+  icon_name: string
+  read_minutes: number
+  level: 'beginner' | 'intermediate' | 'advanced'
+  gradient: string
+  exp_reward: number
+  badge_emoji: string
+  badge_title: string
+  content: any[]
+  key_takeaway: string
+  is_active: boolean
+  sort_order: number
+  created_at: string
+}
+
 export interface TravelPlan {
   plan_title: string
   departure: string
