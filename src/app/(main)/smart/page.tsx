@@ -233,7 +233,7 @@ export default function SmartPage() {
     setRedeemCoupon(coupon)
   }
 
-  const handleRedeemCoupon = async (coupon: Coupon) => {
+  const handleRedeemCoupon = async (coupon: Coupon, savingsAmount: number) => {
     const newUsed = new Set(usedCouponIds)
     newUsed.add(coupon.id)
     setUsedCouponIds(newUsed)
@@ -241,21 +241,13 @@ export default function SmartPage() {
       localStorage.setItem('maneco_used_coupons', JSON.stringify([...newUsed]))
     } catch {}
 
-    let amount = 0
-    if (coupon.discount_type === 'fixed') {
-      amount = coupon.discount_value
-    } else if (coupon.discount_type === 'percentage') {
-      const basePrice = coupon.approx_price || 3000
-      amount = Math.floor(basePrice * (coupon.discount_value / 100))
-    }
-
-    if (amount > 0) {
+    if (savingsAmount > 0) {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
         const { data } = await supabase.from('users').select('total_savings').eq('id', user.id).single()
         if (data) {
           await supabase.from('users').update({ 
-            total_savings: (data.total_savings || 0) + amount 
+            total_savings: (data.total_savings || 0) + savingsAmount 
           }).eq('id', user.id)
         }
       }
