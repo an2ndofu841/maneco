@@ -127,7 +127,7 @@ export default function SurveyModal({ task, onClose, onComplete }: SurveyModalPr
 
   if (isCompleted) {
     return (
-      <div className="fixed inset-0 z-[100] flex flex-col bg-white">
+      <div className="fixed inset-0 z-[100] flex flex-col bg-white safe-area-inset">
         <div className="flex-1 flex flex-col items-center justify-center px-6">
           <div className="absolute inset-0 pointer-events-none">
             {Array.from({ length: 16 }).map((_, i) => (
@@ -144,17 +144,17 @@ export default function SurveyModal({ task, onClose, onComplete }: SurveyModalPr
           </div>
 
           <div className="relative z-10 flex flex-col items-center">
-            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-2xl shadow-amber-500/30 mb-6 coupon-check-enter">
-              <CheckCircle className="w-12 h-12 text-white" />
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-2xl shadow-amber-500/30 mb-6 coupon-check-enter">
+              <CheckCircle className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
             </div>
 
-            <h2 className="text-2xl font-black text-slate-900 mb-2">回答完了！</h2>
-            <p className="text-slate-400 text-sm mb-6">{task.title}</p>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-2">回答完了！</h2>
+            <p className="text-slate-400 text-sm mb-6 text-center px-4">{task.title}</p>
 
-            <div className="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl px-8 py-4 text-center shadow-lg shadow-amber-500/20 mb-2">
+            <div className="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl px-6 sm:px-8 py-4 text-center shadow-lg shadow-amber-500/20 mb-2">
               <div className="flex items-center gap-2 justify-center">
                 <Sparkles className="w-5 h-5 text-amber-200" />
-                <span className="text-white text-3xl font-black">+{task.reward_points}</span>
+                <span className="text-white text-2xl sm:text-3xl font-black">+{task.reward_points}</span>
                 <span className="text-amber-100 text-sm font-bold">pt</span>
               </div>
               <p className="text-amber-100 text-xs mt-1">ポイントが付与されました</p>
@@ -163,7 +163,7 @@ export default function SurveyModal({ task, onClose, onComplete }: SurveyModalPr
         </div>
 
         <div className="px-6 py-4">
-          <button onClick={onClose} className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-base hover:bg-slate-800 transition-colors">
+          <button onClick={onClose} className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-sm sm:text-base hover:bg-slate-800 transition-colors">
             閉じる
           </button>
         </div>
@@ -176,27 +176,27 @@ export default function SurveyModal({ task, onClose, onComplete }: SurveyModalPr
   return (
     <div className="fixed inset-0 z-[100] flex flex-col bg-white">
       {/* Progress */}
-      <div className="h-1 bg-slate-100">
+      <div className="h-1 bg-slate-100 safe-area-pt">
         <div className="h-full bg-gradient-to-r from-indigo-500 to-blue-500 transition-all duration-300" style={{ width: `${progress}%` }} />
       </div>
 
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-        <button onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors">
+      <div className="flex items-center justify-between px-3 sm:px-4 py-3 border-b border-slate-100 safe-area-pt gap-2">
+        <button onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors flex-shrink-0">
           <X className="w-5 h-5 text-slate-500" />
         </button>
-        <div className="text-center">
-          <p className="text-xs text-slate-400 font-medium">{task.company_name}</p>
+        <div className="text-center min-w-0 flex-1">
+          <p className="text-[10px] sm:text-xs text-slate-400 font-medium truncate">{task.company_name}</p>
           <p className="text-sm font-bold text-slate-900">{currentPage + 1} / {totalPages}</p>
         </div>
-        <div className="flex items-center gap-1 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-100">
+        <div className="flex items-center gap-1 bg-amber-50 px-2 sm:px-2.5 py-1 rounded-full border border-amber-100 flex-shrink-0">
           <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-          <span className="text-amber-600 text-xs font-black">{task.reward_points} pt</span>
+          <span className="text-amber-600 text-[11px] sm:text-xs font-black">{task.reward_points} pt</span>
         </div>
       </div>
 
       {/* Question */}
-      <div className="flex-1 overflow-auto px-6 py-8">
+      <div className="flex-1 overflow-auto px-4 sm:px-6 py-6 sm:py-8">
         <div className="max-w-lg mx-auto">
           <p className="text-sm font-bold text-indigo-600 mb-2">Q{currentPage + 1}</p>
           <h2 className="text-lg font-bold text-slate-900 mb-6 leading-relaxed">{question.text}</h2>
@@ -270,17 +270,17 @@ export default function SurveyModal({ task, onClose, onComplete }: SurveyModalPr
 
           {question.type === 'rating' && (
             <div className="flex flex-col items-center gap-4">
-              <div className="flex gap-3">
+              <div className="flex gap-2 sm:gap-3">
                 {[1, 2, 3, 4, 5].map((n) => {
                   const selected = (answers[question.id] as number) >= n
                   return (
                     <button
                       key={n}
                       onClick={() => setAnswer(n)}
-                      className="transition-all active:scale-90"
+                      className="transition-all active:scale-90 p-0.5"
                     >
                       <Star
-                        className={`w-12 h-12 transition-all ${
+                        className={`w-10 h-10 sm:w-12 sm:h-12 transition-all ${
                           selected
                             ? 'text-amber-400 fill-amber-400 drop-shadow-sm'
                             : 'text-slate-200'
@@ -290,7 +290,7 @@ export default function SurveyModal({ task, onClose, onComplete }: SurveyModalPr
                   )
                 })}
               </div>
-              <div className="flex justify-between w-full max-w-[280px] text-xs text-slate-400">
+              <div className="flex justify-between w-full max-w-[260px] sm:max-w-[280px] text-xs text-slate-400">
                 <span>悪い</span>
                 <span>良い</span>
               </div>
@@ -315,11 +315,11 @@ export default function SurveyModal({ task, onClose, onComplete }: SurveyModalPr
       </div>
 
       {/* Footer */}
-      <div className="px-6 py-4 border-t border-slate-100 flex gap-3">
+      <div className="px-4 sm:px-6 py-4 border-t border-slate-100 safe-area-pb flex gap-3">
         {currentPage > 0 && (
           <button
             onClick={handleBack}
-            className="w-14 flex items-center justify-center border border-slate-200 rounded-2xl text-slate-500 hover:bg-slate-50 transition-colors"
+            className="w-12 sm:w-14 flex items-center justify-center border border-slate-200 rounded-2xl text-slate-500 hover:bg-slate-50 transition-colors min-h-[3rem]"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -327,7 +327,7 @@ export default function SurveyModal({ task, onClose, onComplete }: SurveyModalPr
         <button
           onClick={handleNext}
           disabled={!isCurrentAnswered() || submitting}
-          className={`flex-1 py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2 transition-all ${
+          className={`flex-1 py-3.5 sm:py-4 rounded-2xl font-bold text-sm sm:text-base flex items-center justify-center gap-1.5 sm:gap-2 transition-all ${
             isCurrentAnswered() && !submitting
               ? currentPage === totalPages - 1
                 ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg shadow-amber-500/20 active:scale-[0.98]'
@@ -337,7 +337,7 @@ export default function SurveyModal({ task, onClose, onComplete }: SurveyModalPr
         >
           {submitting ? '送信中...' :
            currentPage === totalPages - 1 ? (
-            <>回答を送信して {task.reward_points} pt ゲット <Sparkles className="w-4 h-4" /></>
+            <>送信して {task.reward_points} pt ゲット <Sparkles className="w-4 h-4" /></>
           ) : (
             <>次の質問へ <ChevronRight className="w-4 h-4" /></>
           )}

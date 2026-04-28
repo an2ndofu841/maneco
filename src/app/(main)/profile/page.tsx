@@ -91,8 +91,8 @@ export default function ProfilePage() {
   const occupationLabel = OCCUPATIONS.find((o) => o.value === user.occupation)?.label
 
   return (
-    <div className="min-h-screen pb-24 md:pb-12">
-      <div className="app-container pt-8 md:pt-12">
+    <div className="min-h-screen md:pb-12">
+      <div className="app-container pt-6 md:pt-12">
         
         {/* ヘッダー */}
         <div className="mb-8 flex items-center justify-between">
@@ -131,11 +131,11 @@ export default function ProfilePage() {
 
               <div className="grid grid-cols-2 gap-3 mb-6">
                 <div className="bg-slate-50 rounded-2xl p-3 border border-slate-100">
-                  <p className="text-slate-400 text-[10px] font-bold mb-1">年代</p>
+                  <p className="text-slate-400 text-xs font-bold mb-1">年代</p>
                   <p className="text-slate-900 text-sm font-bold">{ageLabel ?? '未設定'}</p>
                 </div>
                 <div className="bg-slate-50 rounded-2xl p-3 border border-slate-100">
-                  <p className="text-slate-400 text-[10px] font-bold mb-1">職業</p>
+                  <p className="text-slate-400 text-xs font-bold mb-1">職業</p>
                   <p className="text-slate-900 text-sm font-bold">{occupationLabel ?? '未設定'}</p>
                 </div>
               </div>
@@ -167,7 +167,7 @@ export default function ProfilePage() {
               <div className="bento-card p-6 md:p-8 rounded-[2.5rem] space-y-6">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-lg font-bold text-slate-900">プロフィール編集</h3>
-                  <button onClick={() => setEditing(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+                  <button onClick={() => setEditing(false)} className="p-2.5 hover:bg-slate-100 rounded-full transition-colors min-w-[2.75rem] min-h-[2.75rem] flex items-center justify-center">
                     <X className="w-5 h-5 text-slate-400" />
                   </button>
                 </div>

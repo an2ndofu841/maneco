@@ -61,8 +61,9 @@ body {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  overflow-x: hidden;
 }
 
 @media (min-width: 768px) {
@@ -136,6 +137,17 @@ body {
 
 .safe-area-pb {
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-pt {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-inset {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 /* Coupon Redeem Animations */

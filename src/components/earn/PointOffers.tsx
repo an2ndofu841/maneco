@@ -159,13 +159,13 @@ export default function PointOffers() {
             </div>
             <div>
               <h2 className="text-base font-bold text-slate-900">高額ポイント案件</h2>
-              <p className="text-[11px] text-slate-400 font-medium">カード発行・口座開設でガッツリ稼ぐ</p>
+              <p className="text-xs text-slate-400 font-medium">カード発行・口座開設でガッツリ稼ぐ</p>
             </div>
           </div>
         </div>
 
         {/* Category filter */}
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4 md:-mx-0 md:px-0">
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
           {filters.map(f => (
             <button
               key={f.id}
@@ -215,7 +215,7 @@ export default function PointOffers() {
                         )}
                       </div>
                       <h3 className="font-bold text-slate-900 text-sm leading-snug mb-1.5">{offer.title}</h3>
-                      <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">{offer.description}</p>
+                      <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">{offer.description}</p>
                     </div>
 
                     {/* Points */}
@@ -240,7 +240,7 @@ export default function PointOffers() {
                         <Clock className="w-2.5 h-2.5" />{offer.timeEstimate.split('・')[0]}
                       </span>
                     </div>
-                    <span className="text-indigo-500 text-[11px] font-bold flex items-center gap-0.5 group-hover:gap-1 transition-all">
+                    <span className="text-indigo-500 text-xs font-bold flex items-center gap-0.5 group-hover:gap-1 transition-all">
                       詳しく見る <ChevronRight className="w-3 h-3" />
                     </span>
                   </div>
@@ -266,7 +266,7 @@ function OfferDetailModal({ offer, onClose }: { offer: PointOffer; onClose: () =
   return (
     <div className="fixed inset-0 z-[100] flex flex-col bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 flex-shrink-0">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 flex-shrink-0 safe-area-pt">
         <button onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors">
           <X className="w-5 h-5 text-slate-500" />
         </button>
@@ -306,15 +306,15 @@ function OfferDetailModal({ offer, onClose }: { offer: PointOffer; onClose: () =
           {/* Info grid */}
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-              <p className="text-[10px] font-bold text-slate-400 mb-1">カテゴリ</p>
+              <p className="text-xs font-bold text-slate-400 mb-1">カテゴリ</p>
               <p className="text-sm font-bold text-slate-900">{offer.categoryEmoji} {offer.categoryLabel}</p>
             </div>
             <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-              <p className="text-[10px] font-bold text-slate-400 mb-1">難易度</p>
+              <p className="text-xs font-bold text-slate-400 mb-1">難易度</p>
               <p className="text-sm font-bold text-slate-900">{DIFFICULTY_LABELS[offer.difficulty].label}</p>
             </div>
             <div className="col-span-2 bg-slate-50 rounded-2xl p-4 border border-slate-100">
-              <p className="text-[10px] font-bold text-slate-400 mb-1">所要時間</p>
+              <p className="text-xs font-bold text-slate-400 mb-1">所要時間</p>
               <p className="text-sm font-bold text-slate-900">{offer.timeEstimate}</p>
             </div>
           </div>
@@ -347,17 +347,17 @@ function OfferDetailModal({ offer, onClose }: { offer: PointOffer; onClose: () =
       </div>
 
       {/* Footer */}
-      <div className="px-6 py-4 border-t border-slate-100 flex-shrink-0 space-y-2">
+      <div className="px-6 py-4 border-t border-slate-100 flex-shrink-0 safe-area-pb space-y-2">
         <a
           href={offer.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white py-4 rounded-2xl font-bold text-base shadow-lg shadow-amber-500/20 hover:from-amber-600 hover:to-orange-700 transition-all active:scale-[0.98]"
+          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white py-4 rounded-2xl font-bold text-sm sm:text-base shadow-lg shadow-amber-500/20 hover:from-amber-600 hover:to-orange-700 transition-all active:scale-[0.98]"
         >
           <ExternalLink className="w-5 h-5" />
           公式サイトで申し込む（{offer.points.toLocaleString()} pt）
         </a>
-        <p className="text-center text-[10px] text-slate-400">条件達成後、ポイントは自動で付与されます</p>
+        <p className="text-center text-xs text-slate-400">条件達成後、ポイントは自動で付与されます</p>
       </div>
     </div>
   )

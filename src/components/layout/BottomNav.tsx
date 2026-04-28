@@ -18,17 +18,17 @@ export default function BottomNav() {
     <>
       {/* Mobile: bottom floating nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-pb md:hidden pointer-events-none">
-        <div className="px-4 pb-6 pt-4 bg-gradient-to-t from-white via-white/90 to-transparent pointer-events-auto">
-          <div className="mx-auto max-w-sm bg-white/80 backdrop-blur-xl rounded-full border border-white/50 shadow-lg shadow-slate-200/50 flex items-center justify-between px-6 py-2">
+        <div className="px-4 pb-3 pt-3 bg-gradient-to-t from-white via-white/95 to-transparent pointer-events-auto">
+          <div className="mx-auto max-w-sm bg-white/85 backdrop-blur-xl rounded-2xl border border-white/50 shadow-lg shadow-slate-200/50 flex items-center justify-around px-2 py-1.5">
             {navItems.map(({ href, icon: Icon, label }) => {
               const isActive = pathname === href || pathname.startsWith(href + '/')
               return (
                 <Link
                   key={href}
                   href={href}
-                  className={`flex flex-col items-center gap-0.5 transition-all px-2 py-1 rounded-xl ${
+                  className={`flex flex-col items-center gap-0.5 transition-all min-w-[3rem] min-h-[2.75rem] justify-center px-3 py-1.5 rounded-xl active:scale-95 ${
                     isActive
-                      ? 'text-indigo-600'
+                      ? 'text-indigo-600 bg-indigo-50/80'
                       : 'text-slate-400 hover:text-slate-600'
                   }`}
                 >
@@ -36,7 +36,7 @@ export default function BottomNav() {
                     className="w-5 h-5"
                     strokeWidth={isActive ? 2.5 : 2}
                   />
-                  <span className={`text-[10px] font-bold ${isActive ? 'text-indigo-600' : 'text-slate-400'}`}>
+                  <span className={`text-[11px] font-bold leading-none ${isActive ? 'text-indigo-600' : 'text-slate-400'}`}>
                     {label}
                   </span>
                 </Link>

@@ -140,7 +140,7 @@ export default function CouponRedeemModal({ coupon, onClose, onRedeem }: CouponR
           <p className="text-white/70 text-sm font-medium mb-1">{coupon.brand_name}</p>
           <h3 className="text-xl font-bold mb-4 leading-snug">{coupon.title}</h3>
           <div className="flex items-baseline gap-2 mb-4">
-            <span className="text-5xl font-black tracking-tight">{getDiscountText()}</span>
+            <span className="text-4xl sm:text-5xl font-black tracking-tight">{getDiscountText()}</span>
             <span className="text-lg font-bold text-white/80">OFF</span>
           </div>
           <p className="text-white/70 text-sm leading-relaxed mb-4">{coupon.description}</p>
@@ -170,14 +170,14 @@ export default function CouponRedeemModal({ coupon, onClose, onRedeem }: CouponR
   return (
     <div className="fixed inset-0 z-[100] flex flex-col bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 safe-area-pt">
         <button
           onClick={onClose}
           className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
         >
           <X className="w-5 h-5 text-slate-500" />
         </button>
-        <h2 className="font-bold text-slate-900">
+        <h2 className="font-bold text-slate-900 text-sm sm:text-base">
           {step === 'slide' && 'クーポンを使う'}
           {step === 'input_amount' && '節約額を記録'}
           {step === 'redeemed' && '使用完了'}
@@ -186,7 +186,7 @@ export default function CouponRedeemModal({ coupon, onClose, onRedeem }: CouponR
       </div>
 
       {/* Body */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 overflow-auto">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 overflow-auto safe-area-pb">
         {step === 'slide' && (
           <>
             {renderCouponCard(false)}
@@ -216,7 +216,7 @@ export default function CouponRedeemModal({ coupon, onClose, onRedeem }: CouponR
                 className="absolute inset-0 flex items-center justify-center pointer-events-none"
                 style={{ opacity: 1 - progress }}
               >
-                <span className="text-slate-400 text-sm font-bold tracking-widest ml-8">
+                <span className="text-slate-400 text-xs sm:text-sm font-bold tracking-widest ml-6 sm:ml-8">
                   スライドで使用 →
                 </span>
               </div>

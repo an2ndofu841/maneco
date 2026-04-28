@@ -90,17 +90,17 @@ export default function EarnPage() {
   }
 
   return (
-    <div className="min-h-screen pb-24 md:pb-12">
-      <div className="app-container pt-8 md:pt-12">
+    <div className="min-h-screen md:pb-12">
+      <div className="app-container pt-6 md:pt-12">
         {/* ヘッダー */}
-        <div className="mb-8">
+        <div className="mb-6">
           <p className="text-slate-500 text-sm font-medium mb-1">スキマ時間を活用</p>
-          <div className="flex items-end justify-between">
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">お金を増やす 💸</h1>
-            <div className="flex items-center gap-3">
+          <div className="flex items-end justify-between gap-2">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 min-w-0">お金を増やす 💸</h1>
+            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
               <div className="text-right">
-                <p className="text-xs text-slate-500 mb-0.5">今月の獲得</p>
-                <p className="text-emerald-600 font-black text-xl">{totalEarned.toLocaleString()} <span className="text-xs font-medium text-slate-400">pt</span></p>
+                <p className="text-[10px] sm:text-xs text-slate-500 mb-0.5">今月の獲得</p>
+                <p className="text-emerald-600 font-black text-lg sm:text-xl">{totalEarned.toLocaleString()} <span className="text-[10px] sm:text-xs font-medium text-slate-400">pt</span></p>
               </div>
               <Link href="/profile" className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 shadow-sm hover:bg-slate-50 transition-colors flex-shrink-0">
                 <Settings className="w-5 h-5" />
@@ -124,7 +124,7 @@ export default function EarnPage() {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/20">NEW</span>
+                  <span className="bg-white/20 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-white/20">NEW</span>
                   <p className="font-bold text-white text-lg">不用品をAI査定</p>
                 </div>
                 <p className="text-orange-50 text-sm">写真を撮るだけで推定売却価格をAIが瞬時に算出</p>
@@ -205,7 +205,7 @@ export default function EarnPage() {
                   </div>
 
                   {/* メタ情報 */}
-                  <div className="flex items-center gap-3 text-[11px] text-slate-400 font-medium mb-4 bg-slate-50 p-2 rounded-lg">
+                  <div className="flex items-center gap-2 sm:gap-3 text-[11px] text-slate-400 font-medium mb-4 bg-slate-50 p-2 rounded-lg flex-wrap">
                     <span className="flex items-center gap-1">
                       <Clock className="w-3 h-3" />{task.estimated_minutes}分
                     </span>

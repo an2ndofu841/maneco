@@ -251,11 +251,11 @@ export default function LearnSection() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center">
-              <BookOpen className="w-4.5 h-4.5 text-indigo-600" />
+              <BookOpen className="w-4 h-4 text-indigo-600" />
             </div>
             <div>
               <h2 className="text-base font-bold text-slate-900">増やし方を学ぶ</h2>
-              <p className="text-[11px] text-slate-400 font-medium">{readCount}/{totalCount} 記事読了</p>
+              <p className="text-xs text-slate-400 font-medium">{readCount}/{totalCount} 記事読了</p>
             </div>
           </div>
           {readCount > 0 && (
@@ -271,7 +271,7 @@ export default function LearnSection() {
           )}
         </div>
 
-        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 md:-mx-0 md:px-0">
+        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
           {ARTICLES.map((article) => {
             const isRead = readArticles.has(article.id)
             const levelConfig = LEVEL_CONFIG[article.level]
@@ -302,8 +302,8 @@ export default function LearnSection() {
                       </span>
                     </div>
                     <h3 className="font-bold text-slate-900 text-sm leading-snug mb-1 line-clamp-2">{article.title}</h3>
-                    <p className="text-[11px] text-slate-400 line-clamp-1">{article.subtitle}</p>
-                    <div className="mt-2.5 flex items-center text-indigo-500 text-[11px] font-bold group-hover:gap-1.5 gap-1 transition-all">
+                    <p className="text-xs text-slate-400 line-clamp-1">{article.subtitle}</p>
+                    <div className="mt-2.5 flex items-center text-indigo-500 text-xs font-bold group-hover:gap-1.5 gap-1 transition-all">
                       {isRead ? '読み返す' : '読む'} <ChevronRight className="w-3 h-3" />
                     </div>
                   </div>
@@ -380,7 +380,7 @@ function ArticleModal({ article, alreadyRead, onComplete, onClose }: {
   return (
     <div className="fixed inset-0 z-[100] flex flex-col bg-white">
       {/* Progress bar */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-slate-100 z-10">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-slate-100 z-10 safe-area-pt">
         <div
           className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 transition-all duration-150"
           style={{ width: `${scrollProgress * 100}%` }}
@@ -388,15 +388,15 @@ function ArticleModal({ article, alreadyRead, onComplete, onClose }: {
       </div>
 
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 flex-shrink-0">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 flex-shrink-0 safe-area-pt">
         <button onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors">
           <X className="w-5 h-5 text-slate-500" />
         </button>
         <div className="flex items-center gap-2">
-          <span className={`text-[10px] font-bold border px-2 py-0.5 rounded-full ${levelConfig.color} ${levelConfig.bg}`}>
+          <span className={`text-xs font-bold border px-2 py-0.5 rounded-full ${levelConfig.color} ${levelConfig.bg}`}>
             {levelConfig.label}
           </span>
-          <span className="text-[11px] text-slate-400 flex items-center gap-1">
+          <span className="text-xs text-slate-400 flex items-center gap-1">
             <Clock className="w-3 h-3" />{article.readMinutes}分
           </span>
         </div>
@@ -448,15 +448,15 @@ function ArticleModal({ article, alreadyRead, onComplete, onClose }: {
       </div>
 
       {/* Footer */}
-      <div className="px-6 py-4 border-t border-slate-100 flex-shrink-0">
+      <div className="px-6 py-4 border-t border-slate-100 flex-shrink-0 safe-area-pb">
         {alreadyRead ? (
-          <button onClick={onClose} className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-base hover:bg-slate-800 transition-colors">
+          <button onClick={onClose} className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-sm sm:text-base hover:bg-slate-800 transition-colors">
             閉じる
           </button>
         ) : (
           <button
             onClick={handleComplete}
-            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-4 rounded-2xl font-bold text-base hover:from-emerald-600 hover:to-teal-700 transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 article-complete-btn"
+            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-4 rounded-2xl font-bold text-sm sm:text-base hover:from-emerald-600 hover:to-teal-700 transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 article-complete-btn"
           >
             <Sparkles className="w-5 h-5" />
             読了！ +{article.expReward} EXP をゲット
@@ -513,7 +513,7 @@ function ContentBlockRenderer({ block, index, gradient, quizAnswered, onQuizAnsw
       return (
         <div>
           {block.title && <p className="text-sm font-bold text-slate-500 mb-3 text-center">{block.title}</p>}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[block.left, block.right].map((side, i) => (
               <div key={i} className={`rounded-2xl p-4 border ${side.highlight ? 'bg-emerald-50 border-emerald-200 ring-2 ring-emerald-200' : 'bg-slate-50 border-slate-200'}`}>
                 <p className={`text-sm font-bold mb-3 text-center ${side.highlight ? 'text-emerald-700' : 'text-slate-500'}`}>
@@ -697,7 +697,7 @@ function CompletionScreen({ article, onClose }: { article: Article; onClose: () 
   }, [])
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col bg-white">
+    <div className="fixed inset-0 z-[100] flex flex-col bg-white safe-area-inset">
       <div className="flex-1 flex flex-col items-center justify-center px-6 relative overflow-hidden">
         {/* Confetti particles */}
         <div className="absolute inset-0 pointer-events-none">
@@ -717,8 +717,8 @@ function CompletionScreen({ article, onClose }: { article: Article; onClose: () 
         {/* Badge */}
         <div className={`transition-all duration-700 ${showBadge ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
           <div className="relative">
-            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-2xl shadow-amber-500/30">
-              <span className="text-6xl">{article.badge.emoji}</span>
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-2xl shadow-amber-500/30">
+              <span className="text-5xl sm:text-6xl">{article.badge.emoji}</span>
             </div>
             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-[10px] font-black px-3 py-1 rounded-full whitespace-nowrap shadow-lg">
               NEW BADGE!
@@ -755,7 +755,7 @@ function CompletionScreen({ article, onClose }: { article: Article; onClose: () 
       <div className={`px-6 py-4 transition-all duration-500 ${showButton ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
         <button
           onClick={onClose}
-          className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-base hover:bg-slate-800 transition-colors"
+          className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-sm sm:text-base hover:bg-slate-800 transition-colors"
         >
           つぎの記事へ
         </button>

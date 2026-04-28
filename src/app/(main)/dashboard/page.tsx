@@ -52,8 +52,8 @@ export default async function DashboardPage() {
   const todayTip = tips[new Date().getDate() % tips.length]
 
   return (
-    <div className="min-h-screen pb-24 md:pb-12">
-      <div className="app-container pt-8 md:pt-12">
+    <div className="min-h-screen md:pb-12">
+      <div className="app-container pt-6 md:pt-12">
         {/* ヘッダー */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -119,7 +119,7 @@ export default async function DashboardPage() {
 
           {/* 右カラム (チャット & ヒント) */}
           <div className="lg:col-span-4 space-y-6">
-            <div className="bento-card p-1 rounded-3xl h-[500px] lg:h-full min-h-[500px] flex flex-col">
+            <div className="bento-card p-1 rounded-3xl h-[60dvh] lg:h-full min-h-[320px] max-h-[500px] lg:max-h-none flex flex-col">
               <ChatWidget />
             </div>
             
