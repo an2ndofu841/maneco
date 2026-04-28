@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Coupon } from '@/types'
 import TravelPlanner from '@/components/smart/TravelPlanner'
-import { Plane, Tag, ExternalLink, Search, Utensils, ShoppingBag, Palmtree, MapPin, SlidersHorizontal, X } from 'lucide-react'
+import { Plane, Tag, ExternalLink, Search, Utensils, ShoppingBag, Palmtree, MapPin, SlidersHorizontal, X, CheckCircle } from 'lucide-react'
+import CouponRedeemModal from '@/components/smart/CouponRedeemModal'
 
 const COUPON_CATEGORY_CONFIG: Record<string, { label: string; emoji: string; color: string; bg: string }> = {
   travel: { label: '旅行', emoji: '✈️', color: 'text-blue-600', bg: 'bg-blue-50 border-blue-100' },
@@ -167,12 +168,20 @@ export default function SmartPage() {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [showFilters, setShowFilters] = useState(false)
   
-  // Savings Animation
-  const [showSavings, setShowSavings] = useState<{ amount: number } | null>(null)
+  // Redeem modal
+  const [redeemCoupon, setRedeemCoupon] = useState<Coupon | null>(null)
+  const [usedCouponIds, setUsedCouponIds] = useState<Set<string>>(new Set())
 
   const supabase = createClient()
 
   useEffect(() => { loadCoupons() }, [])
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('maneco_used_coupons')
+      if (stored) setUsedCouponIds(new Set(JSON.parse(stored)))
+    } catch {}
+  }, [])
 
   // Get user location
   useEffect(() => {
@@ -219,16 +228,23 @@ export default function SmartPage() {
     setLoading(false)
   }
 
-  const handleUseCoupon = async (coupon: Coupon) => {
-    // 1. Open link immediately
-    window.open(coupon.affiliate_url, '_blank')
+  const handleUseCoupon = (coupon: Coupon) => {
+    if (usedCouponIds.has(coupon.id)) return
+    setRedeemCoupon(coupon)
+  }
 
-    // 2. Calculate savings
+  const handleRedeemCoupon = async (coupon: Coupon) => {
+    const newUsed = new Set(usedCouponIds)
+    newUsed.add(coupon.id)
+    setUsedCouponIds(newUsed)
+    try {
+      localStorage.setItem('maneco_used_coupons', JSON.stringify([...newUsed]))
+    } catch {}
+
     let amount = 0
     if (coupon.discount_type === 'fixed') {
       amount = coupon.discount_value
     } else if (coupon.discount_type === 'percentage') {
-      // Use approx_price if available, otherwise assume a base price (e.g. 3000 yen) for demo
       const basePrice = coupon.approx_price || 3000
       amount = Math.floor(basePrice * (coupon.discount_value / 100))
     }
@@ -241,9 +257,6 @@ export default function SmartPage() {
           await supabase.from('users').update({ 
             total_savings: (data.total_savings || 0) + amount 
           }).eq('id', user.id)
-          
-          setShowSavings({ amount })
-          setTimeout(() => setShowSavings(null), 3000)
         }
       }
     }
@@ -485,12 +498,18 @@ export default function SmartPage() {
                             <span className={`text-[10px] font-medium ${isExpiringSoon ? 'text-red-500' : 'text-slate-400'}`}>
                               {isExpiringSoon ? `⚠️ 残り${daysLeft}日` : `あと${daysLeft}日有効`}
                             </span>
-                            <button
-                              onClick={() => handleUseCoupon(coupon)}
-                              className="flex items-center gap-1 text-[11px] font-bold text-white bg-slate-900 px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-colors shadow-sm"
-                            >
-                              使う <ExternalLink className="w-3 h-3" />
-                            </button>
+                            {usedCouponIds.has(coupon.id) ? (
+                              <span className="flex items-center gap-1 text-[11px] font-bold text-slate-400 bg-slate-100 px-3 py-1.5 rounded-lg">
+                                <CheckCircle className="w-3 h-3" /> 使用済み
+                              </span>
+                            ) : (
+                              <button
+                                onClick={() => handleUseCoupon(coupon)}
+                                className="flex items-center gap-1 text-[11px] font-bold text-white bg-slate-900 px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-colors shadow-sm"
+                              >
+                                使う <ExternalLink className="w-3 h-3" />
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -524,17 +543,12 @@ export default function SmartPage() {
         )}
       </div>
 
-      {showSavings && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-          <div className="bg-white/90 backdrop-blur-md p-8 rounded-[2rem] shadow-2xl border border-emerald-100 animate-bounce-in text-center transform scale-110">
-            <div className="text-5xl mb-3 animate-bounce">💰</div>
-            <p className="text-slate-500 text-xs font-bold mb-1">節約成功！</p>
-            <p className="text-emerald-600 font-black text-4xl tracking-tight">
-              +{showSavings.amount.toLocaleString()}<span className="text-lg ml-1">円</span>
-            </p>
-            <p className="text-slate-400 text-[10px] mt-2 font-medium">累計節約額に反映されました</p>
-          </div>
-        </div>
+      {redeemCoupon && (
+        <CouponRedeemModal
+          coupon={redeemCoupon}
+          onClose={() => setRedeemCoupon(null)}
+          onRedeem={handleRedeemCoupon}
+        />
       )}
     </div>
   )
