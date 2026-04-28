@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { X, BookOpen, Clock, ChevronRight, TrendingUp, Shield, Landmark, PiggyBank, Receipt, Building2, Sparkles, Star } from 'lucide-react'
+import { X, BookOpen, Clock, ChevronRight, TrendingUp, Shield, Landmark, PiggyBank, Receipt, Building2, Sparkles, Star, ExternalLink, Gift } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 // ─── Rich content block types ───
@@ -15,6 +15,7 @@ type ContentBlock =
   | { type: 'steps'; items: { emoji: string; title: string; body: string }[] }
   | { type: 'growth_bars'; title: string; items: { label: string; amount: number; principal: number }[]; unit?: string }
   | { type: 'quiz'; question: string; options: { id: string; text: string; correct: boolean }[]; explanation: string }
+  | { type: 'affiliate_cta'; title: string; subtitle: string; offers: { brand: string; description: string; points: number; gradient: string; url: string; badge?: string }[] }
   | { type: 'divider' }
 
 interface Article {
@@ -81,6 +82,11 @@ const ARTICLES: Article[] = [
         { emoji: '⏰', title: '毎月の積立を設定する', body: '月1,000円からOK！給料日に自動で積み立てる設定にすれば、あとは放置でOK。見なくていい。むしろ見ない方がいい。' },
       ] },
 
+      { type: 'affiliate_cta', title: '口座開設はここからがおトク', subtitle: 'マネコ経由で開設するとポイントがもらえます', offers: [
+        { brand: 'SBI証券', description: 'ネット証券No.1。NISA口座と同時開設で手数料ずっと無料。初心者に一番人気。', points: 4000, gradient: 'from-blue-500 to-indigo-600', url: '#', badge: '人気No.1' },
+        { brand: '楽天証券', description: '楽天ポイントで投資ができる。楽天経済圏ユーザーならこちらがおすすめ。', points: 3500, gradient: 'from-red-500 to-rose-600', url: '#' },
+      ] },
+
       { type: 'callout', emoji: '⚠️', title: '注意ポイント', body: '・投資なので元本保証ではありません\n・短期で売らない（最低10年は続ける気持ちで）\n・生活費を削ってまで投資しない\n・まずは生活防衛資金（3〜6ヶ月分の生活費）を確保してから！', variant: 'warning' },
 
       { type: 'divider' },
@@ -93,6 +99,12 @@ const ARTICLES: Article[] = [
       ] },
 
       { type: 'text', body: '初心者はまず「つみたて投資枠」だけ使えばOK。年120万円 ＝ 月10万円まで積立できます。月1万円からでも全然大丈夫！' },
+
+      { type: 'callout', emoji: '🚀', title: 'NISAを始める準備はOK？', body: '「いつかやろう」は一番もったいない。口座開設は無料で、スマホから10分で完了します。まずは口座だけでも作っておけば、いつでもスタートできますよ。', variant: 'success' },
+
+      { type: 'affiliate_cta', title: '今すぐ始めるなら', subtitle: '口座開設は無料・維持費もゼロ。マネコ経由でポイントも獲得', offers: [
+        { brand: 'SBI証券', description: '口座開設数No.1。取扱ファンド数も業界最多クラス。', points: 4000, gradient: 'from-blue-500 to-indigo-600', url: '#', badge: 'おすすめ' },
+      ] },
 
       { type: 'divider' },
 
@@ -627,6 +639,58 @@ function ContentBlockRenderer({ block, index, gradient, quizAnswered, onQuizAnsw
         </div>
       )
     }
+
+    case 'affiliate_cta':
+      return (
+        <div className="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 overflow-hidden">
+          <div className="px-5 pt-5 pb-3">
+            <div className="flex items-center gap-2 mb-1">
+              <Gift className="w-4 h-4 text-amber-600" />
+              <p className="text-sm font-bold text-slate-900">{block.title}</p>
+            </div>
+            <p className="text-xs text-slate-500">{block.subtitle}</p>
+          </div>
+          <div className="px-4 pb-4 space-y-3">
+            {block.offers.map((offer, i) => (
+              <a
+                key={i}
+                href={offer.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-white rounded-xl border border-slate-100 p-4 hover:border-amber-200 hover:shadow-md transition-all active:scale-[0.98] group"
+              >
+                <div className="flex items-start gap-3">
+                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${offer.gradient} flex items-center justify-center flex-shrink-0 shadow-sm`}>
+                    <Landmark className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                      <span className="text-sm font-bold text-slate-900">{offer.brand}</span>
+                      {offer.badge && (
+                        <span className="text-[10px] font-bold text-amber-700 bg-amber-100 border border-amber-200 px-1.5 py-0.5 rounded-full">{offer.badge}</span>
+                      )}
+                    </div>
+                    <p className="text-xs text-slate-500 leading-relaxed mb-2">{offer.description}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                        <span className="text-amber-600 font-black text-base">{offer.points.toLocaleString()}</span>
+                        <span className="text-amber-400 text-[10px] font-bold">pt もらえる</span>
+                      </div>
+                      <span className="text-xs font-bold text-indigo-500 flex items-center gap-1 group-hover:gap-1.5 transition-all">
+                        詳しく見る <ExternalLink className="w-3 h-3" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+          <div className="px-5 pb-4">
+            <p className="text-[10px] text-slate-400 text-center">提携企業の公式サイトに遷移します。マネコが個人情報を保管することはありません。</p>
+          </div>
+        </div>
+      )
 
     case 'quiz': {
       const answered = quizAnswered[index]
