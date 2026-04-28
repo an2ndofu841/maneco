@@ -33,7 +33,15 @@ export default function ProfilePage() {
   const loadProfile = async () => {
     const { data: { user: authUser } } = await supabase.auth.getUser()
     if (!authUser) return
-    const { data } = await supabase.from('users').select('*').eq('id', authUser.id).single()
+    let { data } = await supabase.from('users').select('*').eq('id', authUser.id).single()
+    if (!data) {
+      const { data: inserted } = await supabase
+        .from('users')
+        .upsert({ id: authUser.id, email: authUser.email ?? '', nickname: authUser.email?.split('@')[0] ?? 'マネコユーザー' }, { onConflict: 'id' })
+        .select()
+        .single()
+      data = inserted
+    }
     if (data) {
       setUser(data as User)
       setForm({

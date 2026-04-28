@@ -12,11 +12,25 @@ export default async function DashboardPage() {
   const { data: { user: authUser } } = await supabase.auth.getUser()
   if (!authUser) redirect('/login')
 
-  const { data: userProfile } = await supabase
+  let { data: userProfile } = await supabase
     .from('users')
     .select('*')
     .eq('id', authUser.id)
     .single()
+
+  if (!userProfile) {
+    const newProfile = {
+      id: authUser.id,
+      email: authUser.email ?? '',
+      nickname: authUser.email?.split('@')[0] ?? 'マネコユーザー',
+    }
+    const { data: inserted } = await supabase
+      .from('users')
+      .upsert(newProfile, { onConflict: 'id' })
+      .select()
+      .single()
+    userProfile = inserted
+  }
 
   const profile: User = userProfile ?? {
     id: authUser.id,

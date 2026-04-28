@@ -6,6 +6,7 @@ import { Task, UserTask } from '@/types'
 import { Clock, Users, Star, CheckCircle, Camera, ChevronRight, Settings } from 'lucide-react'
 import AppraisalModal from '@/components/earn/AppraisalModal'
 import LearnSection from '@/components/earn/LearnSection'
+import PointOffers from '@/components/earn/PointOffers'
 import Link from 'next/link'
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -130,6 +131,9 @@ export default function EarnPage() {
               </div>
             </div>
           </button>
+
+          {/* 高額ポイント案件 */}
+          <PointOffers />
 
           {/* 増やし方を学ぶ */}
           <LearnSection />
