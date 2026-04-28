@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Task, UserTask } from '@/types'
 import { Clock, Users, Star, CheckCircle, Camera, ChevronRight, Settings } from 'lucide-react'
 import AppraisalModal from '@/components/earn/AppraisalModal'
+import SurveyModal from '@/components/earn/SurveyModal'
 import LearnSection from '@/components/earn/LearnSection'
 import PointOffers from '@/components/earn/PointOffers'
 import Link from 'next/link'
@@ -29,6 +30,7 @@ export default function EarnPage() {
   const [completing, setCompleting] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [showAppraisal, setShowAppraisal] = useState(false)
+  const [surveyTask, setSurveyTask] = useState<Task | null>(null)
   const supabase = createClient()
 
   useEffect(() => { loadData() }, [])
@@ -44,13 +46,14 @@ export default function EarnPage() {
     setLoading(false)
   }
 
-  const handleStartTask = async (taskId: string) => {
+  const handleStartTask = async (task: Task) => {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
-    const { error } = await supabase.from('user_tasks').insert({ user_id: user.id, task_id: taskId, status: 'in_progress' })
+    const { error } = await supabase.from('user_tasks').insert({ user_id: user.id, task_id: task.id, status: 'in_progress' })
     if (!error) {
-      setUserTasks((prev) => [...prev, { id: '', user_id: user.id, task_id: taskId, status: 'in_progress', points_earned: 0, created_at: new Date().toISOString() }])
+      setUserTasks((prev) => [...prev, { id: '', user_id: user.id, task_id: task.id, status: 'in_progress', points_earned: 0, created_at: new Date().toISOString() }])
     }
+    setSurveyTask(task)
   }
 
   const handleCompleteTask = async (taskId: string) => {
@@ -230,7 +233,7 @@ export default function EarnPage() {
 
                   {!isCompleted && (
                     <button
-                      onClick={() => isInProgress ? handleCompleteTask(task.id) : handleStartTask(task.id)}
+                      onClick={() => isInProgress ? setSurveyTask(task) : handleStartTask(task)}
                       disabled={completing === task.id || remaining <= 0}
                       className={`w-full py-3 rounded-xl text-sm font-bold transition-all shadow-sm ${
                         isInProgress
@@ -241,7 +244,7 @@ export default function EarnPage() {
                       }`}
                     >
                       {completing === task.id ? '処理中...' :
-                       isInProgress ? '完了報告する' :
+                       isInProgress ? '回答する' :
                        remaining <= 0 ? '満員です' :
                        '参加する'}
                     </button>
@@ -254,6 +257,13 @@ export default function EarnPage() {
       </div>
 
       {showAppraisal && <AppraisalModal onClose={() => setShowAppraisal(false)} />}
+      {surveyTask && (
+        <SurveyModal
+          task={surveyTask}
+          onClose={() => { setSurveyTask(null); loadData() }}
+          onComplete={handleCompleteTask}
+        />
+      )}
     </div>
   )
 }
