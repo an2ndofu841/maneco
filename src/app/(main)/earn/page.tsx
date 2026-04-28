@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Task, UserTask } from '@/types'
-import { Clock, Users, Star, CheckCircle, Camera, ChevronRight } from 'lucide-react'
+import { Clock, Users, Star, CheckCircle, Camera, ChevronRight, Settings } from 'lucide-react'
 import AppraisalModal from '@/components/earn/AppraisalModal'
+import LearnSection from '@/components/earn/LearnSection'
+import Link from 'next/link'
 
 const CATEGORY_LABELS: Record<string, string> = {
   survey: 'アンケート',
@@ -91,9 +93,14 @@ export default function EarnPage() {
           <p className="text-slate-500 text-sm font-medium mb-1">スキマ時間を活用</p>
           <div className="flex items-end justify-between">
             <h1 className="text-2xl md:text-3xl font-bold text-slate-900">お金を増やす 💸</h1>
-            <div className="text-right">
-              <p className="text-xs text-slate-500 mb-0.5">今月の獲得</p>
-              <p className="text-emerald-600 font-black text-xl">{totalEarned.toLocaleString()} <span className="text-xs font-medium text-slate-400">pt</span></p>
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <p className="text-xs text-slate-500 mb-0.5">今月の獲得</p>
+                <p className="text-emerald-600 font-black text-xl">{totalEarned.toLocaleString()} <span className="text-xs font-medium text-slate-400">pt</span></p>
+              </div>
+              <Link href="/profile" className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 shadow-sm hover:bg-slate-50 transition-colors flex-shrink-0">
+                <Settings className="w-5 h-5" />
+              </Link>
             </div>
           </div>
         </div>
@@ -123,6 +130,9 @@ export default function EarnPage() {
               </div>
             </div>
           </button>
+
+          {/* 増やし方を学ぶ */}
+          <LearnSection />
 
           {/* カテゴリフィルター */}
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">

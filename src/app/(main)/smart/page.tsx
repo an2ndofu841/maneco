@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Coupon } from '@/types'
 import TravelPlanner from '@/components/smart/TravelPlanner'
-import { Plane, Tag, ExternalLink, Search, Utensils, ShoppingBag, Palmtree, MapPin, SlidersHorizontal, X, CheckCircle } from 'lucide-react'
+import { Plane, Tag, ExternalLink, Search, Utensils, ShoppingBag, Palmtree, MapPin, SlidersHorizontal, X, CheckCircle, Settings } from 'lucide-react'
+import Link from 'next/link'
 import CouponRedeemModal from '@/components/smart/CouponRedeemModal'
 
 const COUPON_CATEGORY_CONFIG: Record<string, { label: string; emoji: string; color: string; bg: string }> = {
@@ -303,8 +304,15 @@ export default function SmartPage() {
       <div className="app-container pt-8 md:pt-12">
         {/* ヘッダー */}
         <div className="mb-8">
-          <p className="text-slate-500 text-sm font-medium mb-1">お得に賢く</p>
-          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">賢く使う 🛍️</h1>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <p className="text-slate-500 text-sm font-medium mb-1">お得に賢く</p>
+              <h1 className="text-2xl md:text-3xl font-bold text-slate-900">賢く使う 🛍️</h1>
+            </div>
+            <Link href="/profile" className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 shadow-sm hover:bg-slate-50 transition-colors">
+              <Settings className="w-5 h-5" />
+            </Link>
+          </div>
 
           {/* タブ */}
           <div className="flex bg-slate-100 p-1 rounded-2xl max-w-md mb-6">
