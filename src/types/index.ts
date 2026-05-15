@@ -115,6 +115,29 @@ export interface Article {
   created_at: string
 }
 
+export type FixedCostCategory =
+  | 'housing'
+  | 'utility'
+  | 'communication'
+  | 'subscription'
+  | 'insurance'
+  | 'transportation'
+  | 'other'
+
+export type FixedCostBillingCycle = 'monthly' | 'yearly'
+
+export interface FixedCost {
+  id: string
+  user_id: string
+  name: string
+  category: FixedCostCategory
+  amount: number
+  billing_cycle: FixedCostBillingCycle
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
 export interface TravelPlan {
   plan_title: string
   departure: string

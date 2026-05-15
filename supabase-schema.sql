@@ -267,6 +267,46 @@ CREATE POLICY "全ユーザーが記事を参照可" ON public.articles
   FOR SELECT USING (is_active = TRUE);
 
 -- ========================================
+-- User_Fixed_Costsテーブル（ユーザーの固定費）
+-- ========================================
+
+CREATE TABLE IF NOT EXISTS public.user_fixed_costs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  category TEXT NOT NULL CHECK (category IN ('housing', 'utility', 'communication', 'subscription', 'insurance', 'transportation', 'other')),
+  amount INTEGER NOT NULL DEFAULT 0 CHECK (amount >= 0),
+  billing_cycle TEXT NOT NULL DEFAULT 'monthly' CHECK (billing_cycle IN ('monthly', 'yearly')),
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS user_fixed_costs_user_id_idx ON public.user_fixed_costs(user_id);
+
+ALTER TABLE public.user_fixed_costs ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "ユーザーは自分の固定費のみ参照可" ON public.user_fixed_costs;
+CREATE POLICY "ユーザーは自分の固定費のみ参照可" ON public.user_fixed_costs
+  FOR SELECT USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "ユーザーは自分の固定費を作成可" ON public.user_fixed_costs;
+CREATE POLICY "ユーザーは自分の固定費を作成可" ON public.user_fixed_costs
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "ユーザーは自分の固定費を更新可" ON public.user_fixed_costs;
+CREATE POLICY "ユーザーは自分の固定費を更新可" ON public.user_fixed_costs
+  FOR UPDATE USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "ユーザーは自分の固定費を削除可" ON public.user_fixed_costs;
+CREATE POLICY "ユーザーは自分の固定費を削除可" ON public.user_fixed_costs
+  FOR DELETE USING (auth.uid() = user_id);
+
+CREATE OR REPLACE TRIGGER update_user_fixed_costs_updated_at
+  BEFORE UPDATE ON public.user_fixed_costs
+  FOR EACH ROW EXECUTE FUNCTION public.update_updated_at();
+
+-- ========================================
 -- サンプルデータ
 -- ========================================
 

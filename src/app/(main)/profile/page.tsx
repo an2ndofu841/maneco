@@ -1,10 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { User } from '@/types'
-import { LogOut, Edit2, Target, Save, X, User as UserIcon, Briefcase, Calendar } from 'lucide-react'
+import { User, FixedCost } from '@/types'
+import { LogOut, Edit2, Target, Save, X, User as UserIcon, Briefcase, Calendar, Wallet, ChevronRight } from 'lucide-react'
 
 const AGE_GROUPS = [
   { value: 'teen', label: '10代' }, { value: '20s', label: '20代' },
@@ -25,10 +26,15 @@ export default function ProfilePage() {
   const [editing, setEditing] = useState(false)
   const [form, setForm] = useState({ nickname: '', age_group: '', occupation: '', goal_title: '', goal_amount: '' })
   const [saving, setSaving] = useState(false)
+  const [fixedCostsMonthly, setFixedCostsMonthly] = useState(0)
+  const [fixedCostsCount, setFixedCostsCount] = useState(0)
   const router = useRouter()
   const supabase = createClient()
 
-  useEffect(() => { loadProfile() }, [])
+  useEffect(() => {
+    loadProfile()
+    loadFixedCosts()
+  }, [])
 
   const loadProfile = async () => {
     const { data: { user: authUser } } = await supabase.auth.getUser()
@@ -52,6 +58,23 @@ export default function ProfilePage() {
         goal_amount: data.goal_amount?.toString() ?? ''
       })
     }
+  }
+
+  const loadFixedCosts = async () => {
+    const { data: { user: authUser } } = await supabase.auth.getUser()
+    if (!authUser) return
+    const { data } = await supabase
+      .from('user_fixed_costs')
+      .select('amount, billing_cycle, is_active')
+      .eq('user_id', authUser.id)
+      .eq('is_active', true)
+    const items = (data as Pick<FixedCost, 'amount' | 'billing_cycle' | 'is_active'>[] | null) ?? []
+    const total = items.reduce(
+      (sum, c) => sum + (c.billing_cycle === 'yearly' ? Math.round(c.amount / 12) : c.amount),
+      0
+    )
+    setFixedCostsMonthly(total)
+    setFixedCostsCount(items.length)
   }
 
   const handleSave = async () => {
@@ -343,6 +366,39 @@ export default function ProfilePage() {
                     )}
                   </div>
                 </div>
+
+                {/* 固定費カード */}
+                <Link
+                  href="/profile/fixed-costs"
+                  className="bento-card p-6 rounded-[2.5rem] block group hover:shadow-lg transition-all relative overflow-hidden"
+                >
+                  <div className="absolute right-0 top-0 w-40 h-40 bg-emerald-50 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-110" />
+                  <div className="relative z-10 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 flex-shrink-0">
+                      <Wallet className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-emerald-600 mb-1">毎月の固定費</p>
+                      {fixedCostsCount > 0 ? (
+                        <>
+                          <p className="text-2xl font-black text-slate-900 tracking-tight">
+                            ¥{fixedCostsMonthly.toLocaleString()}
+                            <span className="text-xs font-medium text-slate-400 ml-1">/月</span>
+                          </p>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            {fixedCostsCount}件登録中 ・ 年間 ¥{(fixedCostsMonthly * 12).toLocaleString()}
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-base font-bold text-slate-900">家賃やサブスクを登録</p>
+                          <p className="text-xs text-slate-500 mt-0.5">AIが見直しポイントを提案します</p>
+                        </>
+                      )}
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-slate-600 group-hover:translate-x-1 transition-all flex-shrink-0" />
+                  </div>
+                </Link>
 
                 {/* 獲得履歴（プレースホルダー） */}
                 <div className="bento-card p-6 rounded-[2.5rem]">
