@@ -11,7 +11,13 @@ import {
   MessageCircle,
   Zap,
   PieChart,
-  CreditCard
+  Camera,
+  Ticket,
+  Brain,
+  Target,
+  CheckCircle2,
+  Clock,
+  HeartHandshake,
 } from 'lucide-react'
 
 export default async function HomePage() {
@@ -45,30 +51,34 @@ export default async function HomePage() {
       </nav>
 
       {/* ヒーローセクション */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+      <section className="relative pt-32 pb-20 lg:pt-44 lg:pb-28 overflow-hidden">
         <div className="app-container relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-medium mb-8 animate-fade-in-up">
               <Sparkles className="w-3 h-3" />
-              <span>AIがお金の悩みを0秒で解決</span>
+              <span>AIマネーコンシェルジュ</span>
             </div>
-            
+
             <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1] mb-6">
-              お金の不安を、<br className="hidden md:block" />
-              <span className="text-gradient-primary">シンプルに整える。</span>
+              お金の悩みは、<br className="hidden md:block" />
+              <span className="text-gradient-primary">話すだけで片付く。</span>
             </h1>
-            
-            <p className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-              「今月ピンチ」「旅行に行きたい」... その悩み、AIに話すだけ。<br className="hidden md:block" />
-              面倒な家計簿は不要。あなたに最適なアクションを即座に提案します。
+
+            <p className="text-lg text-slate-600 mb-4 max-w-2xl mx-auto leading-relaxed">
+              <span className="font-semibold text-slate-900">使う・貯める・稼ぐ</span> をAIがまるごとサポート。<br className="hidden md:block" />
+              家計簿いらず、面倒な入力ゼロ。チャットで相談するだけで、今日からできる行動プランが届きます。
             </p>
-            
+
+            <p className="text-sm text-slate-500 mb-10">
+              「来月ピンチ…」「旅行の予算組みたい」「あと3,000円稼ぎたい」── そんな悩みも、3秒で解決。
+            </p>
+
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/register"
                 className="btn-primary h-12 px-8 rounded-full flex items-center gap-2 font-semibold text-base w-full sm:w-auto justify-center"
               >
-                今すぐ始める
+                無料でAIに相談してみる
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
@@ -79,7 +89,7 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <div className="mt-12 flex items-center justify-center gap-6 text-sm text-slate-500">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-slate-500">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
                 <span>完全無料</span>
@@ -88,24 +98,141 @@ export default async function HomePage() {
                 <Zap className="w-4 h-4 text-amber-500" />
                 <span>登録30秒</span>
               </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-indigo-500" />
+                <span>クレカ登録不要</span>
+              </div>
             </div>
           </div>
         </div>
-        
+
         {/* 背景装飾 */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-3xl -z-10 pointer-events-none" />
       </section>
 
-      {/* Bento Grid セクション */}
-      <section className="py-20 bg-white/50 border-t border-slate-100">
+      {/* 共感セクション: 3つの悩み・ひとつの答え */}
+      <section className="py-20 border-t border-slate-100">
         <div className="app-container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">
-              必要な機能だけを、<br />
-              美しくパッケージ。
+          <div className="text-center mb-14 max-w-2xl mx-auto">
+            <p className="text-sm font-semibold text-indigo-600 mb-3 tracking-wide">WHY MANECO</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 leading-tight">
+              そのお金の悩み、<br className="md:hidden" />
+              バラバラに解決していませんか？
             </h2>
             <p className="text-slate-600">
-              複雑な機能はいりません。直感的に使える3つのコア機能。
+              家計簿アプリ、ポイ活アプリ、節約サイト… アプリを行ったり来たりするのは、もう終わり。
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+            {/* 悩み1 */}
+            <div className="bg-white/60 rounded-2xl p-6 border border-slate-200/60">
+              <div className="text-3xl mb-3">😩</div>
+              <h3 className="font-bold text-slate-900 mb-2">家計簿が続かない</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                毎日の入力が面倒で、3日でやめちゃう。結局、何にいくら使ったかわからない。
+              </p>
+            </div>
+            {/* 悩み2 */}
+            <div className="bg-white/60 rounded-2xl p-6 border border-slate-200/60">
+              <div className="text-3xl mb-3">🤔</div>
+              <h3 className="font-bold text-slate-900 mb-2">何から始めればいい？</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                節約・投資・ポイ活… 情報が多すぎて、自分に合うやり方がわからない。
+              </p>
+            </div>
+            {/* 悩み3 */}
+            <div className="bg-white/60 rounded-2xl p-6 border border-slate-200/60">
+              <div className="text-3xl mb-3">💸</div>
+              <h3 className="font-bold text-slate-900 mb-2">急な出費でピンチ</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                給料日まであと10日、財布が寂しい。誰かに具体的なアドバイスが欲しい。
+              </p>
+            </div>
+          </div>
+
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 text-white text-sm font-semibold shadow-lg shadow-indigo-500/20 mb-4">
+              <Sparkles className="w-4 h-4" />
+              <span>マネコなら、ぜんぶチャット1つで</span>
+            </div>
+            <p className="text-slate-700 text-lg leading-relaxed">
+              AIがあなたの状況に合わせて、<span className="font-semibold text-slate-900">節約・収入アップ・賢い使い方</span>を提案。<br className="hidden md:block" />
+              すぐ実行できる選択肢まで用意するので、悩む時間がゼロになります。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* How it works: 3ステップ */}
+      <section className="py-20 bg-white/50 border-t border-slate-100">
+        <div className="app-container">
+          <div className="text-center mb-14">
+            <p className="text-sm font-semibold text-indigo-600 mb-3 tracking-wide">HOW IT WORKS</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+              3ステップで、お金が整う。
+            </h2>
+            <p className="text-slate-600">
+              アプリを開いて、相談して、選ぶだけ。たったこれだけ。
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {/* Step 1 */}
+            <div className="relative bento-card p-8 rounded-3xl">
+              <div className="absolute -top-3 left-8 px-3 py-1 rounded-full bg-indigo-600 text-white text-xs font-bold tracking-wider">
+                STEP 1
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-600 mb-5 mt-2">
+                <MessageCircle className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-slate-900 mb-2 text-lg">話しかける</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                「あと5,000円欲しい」「節約したい」など、あなたの言葉でそのまま入力。
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="relative bento-card p-8 rounded-3xl">
+              <div className="absolute -top-3 left-8 px-3 py-1 rounded-full bg-indigo-600 text-white text-xs font-bold tracking-wider">
+                STEP 2
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 mb-5 mt-2">
+                <Brain className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-slate-900 mb-2 text-lg">AIが提案</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                あなた専用のアクションプランをAIが瞬時に作成。複数の選択肢から選べます。
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="relative bento-card p-8 rounded-3xl">
+              <div className="absolute -top-3 left-8 px-3 py-1 rounded-full bg-indigo-600 text-white text-xs font-bold tracking-wider">
+                STEP 3
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 mb-5 mt-2">
+                <Target className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-slate-900 mb-2 text-lg">その場で実行</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                提案された案件・クーポン・プランをワンタップで実行。成果は自動で記録されます。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Bento Grid セクション: 機能紹介 */}
+      <section className="py-20 border-t border-slate-100">
+        <div className="app-container">
+          <div className="text-center mb-16">
+            <p className="text-sm font-semibold text-indigo-600 mb-3 tracking-wide">FEATURES</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+              あなたの財布の、最強の味方。
+            </h2>
+            <p className="text-slate-600">
+              「使う・貯める・稼ぐ」のすべてを、ひとつのアプリで。
             </p>
           </div>
 
@@ -116,55 +243,154 @@ export default async function HomePage() {
                 <div className="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-600 mb-6">
                   <MessageCircle className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">AIコンシェルジュ</h3>
-                <p className="text-slate-600 max-w-md">
-                  「来月の旅行予算を作りたい」「今すぐ3000円節約したい」<br />
-                  どんな悩みもチャットで相談。具体的なアクションプランを提示します。
+                <h3 className="text-xl font-bold text-slate-900 mb-2">AIマネーコンシェルジュ</h3>
+                <p className="text-slate-600 max-w-md leading-relaxed">
+                  プロのファイナンシャルプランナーのような相談相手が、24時間あなたの隣に。<br />
+                  予算配分、節約のコツ、副業のヒントまで、なんでも気軽に聞けます。
                 </p>
+                <div className="mt-4 inline-flex items-center gap-2 text-xs text-slate-500">
+                  <Clock className="w-3 h-3" />
+                  <span>平均応答3秒。深夜の悩み相談にも。</span>
+                </div>
               </div>
               <div className="absolute right-[-20px] bottom-[-20px] opacity-10 group-hover:opacity-20 transition-opacity duration-500">
                 <MessageCircle className="w-64 h-64" />
               </div>
             </div>
 
-            {/* カード 2: 稼ぐ (小) */}
+            {/* カード 2: 不用品査定 */}
             <div className="bento-card p-8 rounded-3xl relative overflow-hidden group">
               <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 mb-6">
-                <Wallet className="w-6 h-6" />
+                <Camera className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">スキマで稼ぐ</h3>
-              <p className="text-slate-600 text-sm">
-                アンケートや不用品査定で、<br />
-                賢くお小遣い稼ぎ。
+              <h3 className="text-xl font-bold text-slate-900 mb-2">AIカメラ査定</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                家にある不用品を撮るだけで、AIが瞬時に買取額を試算。
               </p>
             </div>
 
-            {/* カード 3: 使う (小) */}
+            {/* カード 3: アンケート案件 */}
             <div className="bento-card p-8 rounded-3xl relative overflow-hidden group">
               <div className="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600 mb-6">
-                <Plane className="w-6 h-6" />
+                <Wallet className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">賢く使う</h3>
-              <p className="text-slate-600 text-sm">
-                予算逆算型の旅行プランナーや<br />
-                最適化されたクーポン。
+              <h3 className="text-xl font-bold text-slate-900 mb-2">スキマ案件</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                通勤中の5分でできる、企業のアンケート・リサーチ案件。
               </p>
             </div>
 
-            {/* カード 4: 可視化 (大) */}
-            <div className="bento-card md:col-span-2 p-8 rounded-3xl relative overflow-hidden group">
-              <div className="relative z-10">
+            {/* カード 4: 旅行プランナー */}
+            <div className="bento-card p-8 rounded-3xl relative overflow-hidden group">
+              <div className="w-12 h-12 rounded-2xl bg-rose-100 flex items-center justify-center text-rose-600 mb-6">
+                <Plane className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">予算逆算プランナー</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                「5万円で2泊3日」など予算からAIが旅行プランを作成。
+              </p>
+            </div>
+
+            {/* カード 5: クーポン */}
+            <div className="bento-card p-8 rounded-3xl relative overflow-hidden group">
+              <div className="w-12 h-12 rounded-2xl bg-violet-100 flex items-center justify-center text-violet-600 mb-6">
+                <Ticket className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">パーソナル特典</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                あなたの行動履歴に合わせた、本当に使えるクーポンだけを厳選。
+              </p>
+            </div>
+
+            {/* カード 6: 成長可視化 (大) */}
+            <div className="bento-card md:col-span-3 p-8 rounded-3xl relative overflow-hidden group">
+              <div className="relative z-10 max-w-xl">
                 <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 mb-6">
                   <PieChart className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">成長が見える化</h3>
-                <p className="text-slate-600 max-w-md">
-                  節約した額、稼いだ額を自動で集計。<br />
-                  キャラクターの成長と共に、あなたの資産形成スキルも向上します。
+                <h3 className="text-xl font-bold text-slate-900 mb-2">続けられる、成長の可視化</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  節約した額・稼いだ額が自動で集計され、相棒キャラクターと一緒に成長。<br />
+                  数字とゲーム感で、お金の習慣が自然と続きます。
                 </p>
               </div>
-              <div className="absolute right-[-20px] bottom-[-20px] opacity-10 group-hover:opacity-20 transition-opacity duration-500">
-                <TrendingUp className="w-64 h-64" />
+              <div className="absolute right-[-30px] bottom-[-30px] opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+                <TrendingUp className="w-72 h-72" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* リアルな相談例 */}
+      <section className="py-20 bg-white/50 border-t border-slate-100">
+        <div className="app-container">
+          <div className="text-center mb-14">
+            <p className="text-sm font-semibold text-indigo-600 mb-3 tracking-wide">EXAMPLE</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+              こんな相談ができます。
+            </h2>
+            <p className="text-slate-600">
+              ふだん友達に話すような感覚で、AIに頼ってみてください。
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {/* 相談例 1 */}
+            <div className="bento-card rounded-3xl p-6">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-lg flex-shrink-0">
+                  🙋
+                </div>
+                <div className="flex-1 bg-slate-100 rounded-2xl rounded-tl-sm px-4 py-3">
+                  <p className="text-sm text-slate-800 leading-relaxed">
+                    給料日まであと8日。財布に2,000円しかない…どうしよう。
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 ml-6">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white text-lg flex-shrink-0 shadow-md">
+                  🐱
+                </div>
+                <div className="flex-1 bg-indigo-50 rounded-2xl rounded-tl-sm px-4 py-3 border border-indigo-100">
+                  <p className="text-sm text-slate-800 leading-relaxed mb-2">
+                    一緒に乗り切りましょう！今すぐ試せる3つのアクションを提案します:
+                  </p>
+                  <ul className="text-xs text-slate-700 space-y-1">
+                    <li>① 5分のアンケート案件 (+500pt)</li>
+                    <li>② 棚の不用品をAI査定 (推定 +3,000円)</li>
+                    <li>③ 自炊レシピ&近所の特売情報</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* 相談例 2 */}
+            <div className="bento-card rounded-3xl p-6">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-lg flex-shrink-0">
+                  🧳
+                </div>
+                <div className="flex-1 bg-slate-100 rounded-2xl rounded-tl-sm px-4 py-3">
+                  <p className="text-sm text-slate-800 leading-relaxed">
+                    秋に5万円で温泉旅行に行きたい。3ヶ月で貯めるには？
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 ml-6">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white text-lg flex-shrink-0 shadow-md">
+                  🐱
+                </div>
+                <div className="flex-1 bg-indigo-50 rounded-2xl rounded-tl-sm px-4 py-3 border border-indigo-100">
+                  <p className="text-sm text-slate-800 leading-relaxed mb-2">
+                    月17,000円ペースでOK。あなた向けプランを用意しました:
+                  </p>
+                  <ul className="text-xs text-slate-700 space-y-1">
+                    <li>① サブスク見直しで -3,200円/月</li>
+                    <li>② 週3案件で +8,000円/月</li>
+                    <li>③ 5万円以内のおすすめ温泉プラン3選</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -176,12 +402,16 @@ export default async function HomePage() {
         <div className="app-container">
           <div className="bg-slate-900 rounded-[2.5rem] p-12 md:p-20 text-center relative overflow-hidden">
             <div className="relative z-10 max-w-2xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                お金の不安を、<br />
-                今日で終わりにしませんか？
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-medium mb-6">
+                <HeartHandshake className="w-3 h-3" />
+                <span>お金の不安に、ひとりで悩まない</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
+                今日から、AIがあなたの<br />
+                お金のパートナーに。
               </h2>
-              <p className="text-slate-400 mb-10 text-lg">
-                クレジットカード登録不要。30秒でアカウント作成。<br />
+              <p className="text-slate-400 mb-10 text-lg leading-relaxed">
+                登録は30秒、クレジットカードは不要。<br className="hidden md:block" />
                 まずはAIに「こんにちは」と話しかけてみてください。
               </p>
               <Link
@@ -191,8 +421,11 @@ export default async function HomePage() {
                 無料でアカウント作成
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
+              <p className="text-slate-500 text-xs mt-6">
+                ※ 完全無料 / 解約はいつでもワンタップ
+              </p>
             </div>
-            
+
             {/* 装飾 */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
               <div className="absolute top-[-50%] left-[-20%] w-[600px] h-[600px] bg-indigo-600/30 rounded-full blur-[100px]" />
