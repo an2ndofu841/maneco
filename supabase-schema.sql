@@ -294,6 +294,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+GRANT EXECUTE ON FUNCTION public.claim_welcome_bonus() TO authenticated;
+
 -- ========================================
 -- User_Fixed_Costsテーブル（ユーザーの固定費）
 -- ========================================
@@ -333,6 +335,29 @@ CREATE POLICY "ユーザーは自分の固定費を削除可" ON public.user_fix
 CREATE OR REPLACE TRIGGER update_user_fixed_costs_updated_at
   BEFORE UPDATE ON public.user_fixed_costs
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at();
+
+-- ========================================
+-- Retention_Feedbackテーブル（退会理由の匿名フィードバック）
+-- ========================================
+
+CREATE TABLE IF NOT EXISTS public.retention_feedback (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  reason TEXT NOT NULL,
+  feedback TEXT,
+  age_group TEXT,
+  occupation TEXT,
+  total_savings INTEGER DEFAULT 0,
+  total_points INTEGER DEFAULT 0,
+  days_used INTEGER DEFAULT 0,
+  character_level INTEGER DEFAULT 1,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.retention_feedback ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "誰でも退会フィードバックを送信可" ON public.retention_feedback;
+CREATE POLICY "誰でも退会フィードバックを送信可" ON public.retention_feedback
+  FOR INSERT WITH CHECK (true);
 
 -- ========================================
 -- サンプルデータ
