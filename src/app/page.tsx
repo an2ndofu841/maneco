@@ -18,6 +18,12 @@ import {
   CheckCircle2,
   Clock,
   HeartHandshake,
+  MapPin,
+  Star,
+  Utensils,
+  ShoppingBag,
+  Smartphone,
+  TrendingDown,
 } from 'lucide-react'
 
 export default async function HomePage() {
@@ -223,11 +229,266 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Spotlight: AI旅行プランナー */}
+      <section className="py-20 border-t border-slate-100">
+        <div className="app-container">
+          <div className="text-center mb-12 max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 border border-rose-100 text-rose-600 text-xs font-semibold mb-4">
+              <Plane className="w-3 h-3" />
+              <span>SPOTLIGHT 01</span>
+            </div>
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 leading-tight">
+              「予算◯万円で旅したい」が<br className="md:hidden" />ひとことで叶う。
+            </h2>
+            <p className="text-slate-600 leading-relaxed">
+              出発地・目的地・予算・日数を入れるだけ。AIがリアルタイムの相場感で<br className="hidden md:block" />
+              現実的な旅行プランを瞬時に組み立てます。
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-center">
+            {/* 左: 機能の特長 */}
+            <div className="space-y-5 order-2 lg:order-1">
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center flex-shrink-0">
+                  <Target className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 mb-1">予算ピッタリで、ちゃんと収まる</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    交通費・宿泊・食事・観光まで全部込みで予算内に。「実は予算オーバーでした」がありません。
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0">
+                  <Star className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 mb-1">妥協点と「課金UP」も提示</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    「ここを我慢すればOK」「+3,000円でタクシー利用」など、自分で調整できる選択肢付き。
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 mb-1">具体的な店名・施設名つき</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    「カフェ」ではなく「カフェ◯◯」と、すぐ予約できる粒度の旅程が日別で出ます。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 右: モックUI */}
+            <div className="bento-card rounded-3xl p-6 order-1 lg:order-2 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-rose-100 rounded-full blur-3xl -mr-10 -mt-10 opacity-50" />
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-xs font-bold text-slate-500 tracking-wider">YOUR REQUEST</div>
+                  <div className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
+                    予算内 ✓
+                  </div>
+                </div>
+                <div className="bg-slate-50 rounded-2xl p-4 mb-4 border border-slate-100">
+                  <p className="text-sm text-slate-700 leading-relaxed">
+                    <span className="font-bold">東京 → 沖縄</span> ／ 予算 <span className="font-bold">¥50,000</span> ／ 2泊3日
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-br from-rose-500 to-orange-500 rounded-2xl p-5 text-white mb-4">
+                  <div className="text-[10px] font-bold opacity-80 tracking-wider mb-1">AI PLAN</div>
+                  <h4 className="font-bold text-lg mb-3">南国リフレッシュ満喫プラン</h4>
+                  <div className="flex items-end justify-between">
+                    <div>
+                      <p className="text-3xl font-black">¥48,500</p>
+                      <p className="text-xs opacity-80">合計（予算内）</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="flex items-center gap-1 mb-1">
+                        <Star className="w-3 h-3 fill-current" />
+                        <Star className="w-3 h-3 fill-current" />
+                        <Star className="w-3 h-3 fill-current" />
+                        <Star className="w-3 h-3 fill-current" />
+                        <Star className="w-3 h-3 fill-current opacity-60" />
+                      </div>
+                      <p className="text-[10px] opacity-80">総合スコア 4.5</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs px-3 py-2.5 rounded-xl bg-white border border-slate-100">
+                    <span className="flex items-center gap-2 text-slate-700">
+                      <Plane className="w-3 h-3 text-rose-500" />
+                      <span className="font-medium">LCC往復（成田⇄那覇）</span>
+                    </span>
+                    <span className="font-bold text-slate-900">¥18,000</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs px-3 py-2.5 rounded-xl bg-white border border-slate-100">
+                    <span className="flex items-center gap-2 text-slate-700">
+                      <span className="w-3 h-3 rounded bg-amber-400 inline-block" />
+                      <span className="font-medium">宿泊×2泊（ゲストハウス）</span>
+                    </span>
+                    <span className="font-bold text-slate-900">¥16,000</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs px-3 py-2.5 rounded-xl bg-white border border-slate-100">
+                    <span className="flex items-center gap-2 text-slate-700">
+                      <Utensils className="w-3 h-3 text-orange-500" />
+                      <span className="font-medium">食事・観光・移動</span>
+                    </span>
+                    <span className="font-bold text-slate-900">¥14,500</span>
+                  </div>
+                </div>
+
+                <div className="mt-3 px-3 py-2 rounded-xl bg-amber-50 border border-amber-100 text-[11px] text-amber-700 leading-relaxed">
+                  💡 <span className="font-bold">+3,000円</span>で空港からタクシー利用にアップグレード可能
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Spotlight: パーソナルクーポン */}
+      <section className="py-20 bg-white/50 border-t border-slate-100">
+        <div className="app-container">
+          <div className="text-center mb-12 max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-50 border border-violet-100 text-violet-600 text-xs font-semibold mb-4">
+              <Ticket className="w-3 h-3" />
+              <span>SPOTLIGHT 02</span>
+            </div>
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 leading-tight">
+              使えるクーポンだけ、<br className="md:hidden" />
+              欲しいタイミングで。
+            </h2>
+            <p className="text-slate-600 leading-relaxed">
+              「ご飯」「日用品」「レジャー」── 利用シーンとあなたの居場所から、<br className="hidden md:block" />
+              本当に使えるクーポンだけを厳選表示します。
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-center">
+            {/* 左: モックUI */}
+            <div className="bento-card rounded-3xl p-6 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-violet-100 rounded-full blur-3xl -mr-10 -mt-10 opacity-60" />
+              <div className="relative z-10">
+                {/* シーンフィルタ */}
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="text-[10px] font-bold text-slate-500 tracking-wider">FILTER</div>
+                  <div className="flex-1" />
+                </div>
+                <div className="flex gap-2 mb-5">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500 text-white text-xs font-bold shadow-md shadow-orange-500/30">
+                    <Utensils className="w-3 h-3" />
+                    ご飯
+                  </div>
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-slate-500 text-xs font-bold border border-slate-200">
+                    <ShoppingBag className="w-3 h-3" />
+                    日用品
+                  </div>
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-slate-500 text-xs font-bold border border-slate-200">
+                    <Plane className="w-3 h-3" />
+                    レジャー
+                  </div>
+                </div>
+
+                {/* 位置情報チップ */}
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-[10px] font-bold mb-4">
+                  <MapPin className="w-3 h-3" />
+                  <span>新宿区から500m以内</span>
+                </div>
+
+                {/* クーポンサンプル */}
+                <div className="space-y-2">
+                  <div className="rounded-2xl border border-orange-100 bg-gradient-to-br from-orange-50 to-amber-50 p-4 relative overflow-hidden">
+                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-orange-500 text-white text-[10px] font-black">
+                      10% OFF
+                    </div>
+                    <p className="text-xs font-bold text-orange-700 mb-0.5">カフェ・ド・マネコ</p>
+                    <p className="text-sm font-bold text-slate-900 mb-1">全品10%OFFクーポン</p>
+                    <p className="text-[10px] text-slate-500">📍 新宿区 ・ ランチタイム限定</p>
+                  </div>
+
+                  <div className="rounded-2xl border border-pink-100 bg-gradient-to-br from-pink-50 to-rose-50 p-4 relative overflow-hidden">
+                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-pink-500 text-white text-[10px] font-black">
+                      ¥500 OFF
+                    </div>
+                    <p className="text-xs font-bold text-pink-700 mb-0.5">UberEats</p>
+                    <p className="text-sm font-bold text-slate-900 mb-1">3,000円以上で500円OFF</p>
+                    <p className="text-[10px] text-slate-500">📍 配達エリア対応</p>
+                  </div>
+
+                  <div className="rounded-2xl border border-purple-100 bg-gradient-to-br from-purple-50 to-violet-50 p-4 relative overflow-hidden opacity-90">
+                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-purple-500 text-white text-[10px] font-black">
+                      初月無料
+                    </div>
+                    <p className="text-xs font-bold text-purple-700 mb-0.5">IIJmio</p>
+                    <p className="text-sm font-bold text-slate-900 mb-1">格安SIM 初月基本料無料</p>
+                    <p className="text-[10px] text-slate-500">📱 スマホ代を月2,000円節約</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 右: 機能の特長 */}
+            <div className="space-y-5">
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-violet-100 text-violet-600 flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 mb-1">位置情報ベースで「今すぐ使える」</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    今いる場所の近くで使えるクーポンだけを表示。スクロールしても使えないクーポンばかり…がありません。
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center flex-shrink-0">
+                  <Utensils className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 mb-1">利用シーンで一発フィルタ</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    「ご飯」「日用品」「レジャー」のタブをタップするだけ。今この瞬間に必要なクーポンだけが残ります。
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                  <TrendingDown className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 mb-1">固定費の削減提案も</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    通信費・保険・サブスクの乗り換え案件まで網羅。月々の支出を恒久的に下げるチャンスを逃しません。
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2 pt-2">
+                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">✈️ 旅行</span>
+                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-orange-50 text-orange-700 border border-orange-100">🍽️ グルメ</span>
+                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-pink-50 text-pink-700 border border-pink-100">🛍️ ショッピング</span>
+                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-100">💰 節税</span>
+                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-100">📱 通信</span>
+                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">📈 投資</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Bento Grid セクション: 機能紹介 */}
       <section className="py-20 border-t border-slate-100">
         <div className="app-container">
           <div className="text-center mb-16">
-            <p className="text-sm font-semibold text-indigo-600 mb-3 tracking-wide">FEATURES</p>
+            <p className="text-sm font-semibold text-indigo-600 mb-3 tracking-wide">ALL FEATURES</p>
             <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
               あなたの財布の、最強の味方。
             </h2>
