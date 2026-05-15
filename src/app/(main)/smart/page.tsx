@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Coupon } from '@/types'
 import TravelPlanner from '@/components/smart/TravelPlanner'
-import { Plane, Tag, ExternalLink, Search, Utensils, ShoppingBag, Palmtree, MapPin, SlidersHorizontal, X, CheckCircle, Settings } from 'lucide-react'
+import { Plane, Tag, ExternalLink, Search, Utensils, ShoppingBag, Palmtree, MapPin, SlidersHorizontal, X, CheckCircle, Settings, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import CouponRedeemModal from '@/components/smart/CouponRedeemModal'
 
@@ -313,6 +313,31 @@ export default function SmartPage() {
               <Settings className="w-5 h-5" />
             </Link>
           </div>
+
+          {/* ふるさと納税アシスタント誘導バナー */}
+          <Link
+            href="/furusato"
+            className="block rounded-3xl p-5 mb-6 text-white relative overflow-hidden group hover:shadow-xl transition-all"
+            style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #ec4899 100%)' }}
+          >
+            <div className="absolute top-[-30%] right-[-10%] w-48 h-48 bg-white/20 rounded-full blur-3xl group-hover:scale-110 transition-transform" />
+            <div className="absolute bottom-[-30%] left-[-10%] w-40 h-40 bg-white/10 rounded-full blur-3xl" />
+            <div className="relative z-10 flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-white/30 backdrop-blur-md border border-white/30 flex items-center justify-center text-3xl flex-shrink-0">
+                🎁
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] font-bold tracking-widest opacity-90 mb-0.5">FURUSATO TAX ASSISTANT</p>
+                <p className="text-lg font-black drop-shadow-sm leading-tight mb-0.5">
+                  ふるさと納税、世界一やさしく解説
+                </p>
+                <p className="text-xs opacity-95 leading-relaxed">
+                  あなたの上限額を一発計算 ・ 実質¥2,000で返礼品ゲット
+                </p>
+              </div>
+              <ArrowRight className="w-5 h-5 flex-shrink-0 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
 
           {/* タブ */}
           <div className="flex bg-slate-100 p-1 rounded-2xl max-w-md mb-6">
