@@ -26,13 +26,26 @@ import {
   TrendingDown,
 } from 'lucide-react'
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ goodbye?: string }>
+}) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (user) redirect('/dashboard')
 
+  const params = await searchParams
+  const showGoodbye = params.goodbye === '1'
+
   return (
     <div className="min-h-screen overflow-x-hidden">
+      {showGoodbye && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-full bg-white border border-slate-200 shadow-2xl text-sm font-medium text-slate-700 flex items-center gap-2 animate-fade-in">
+          <span className="text-base">🐱</span>
+          ご利用ありがとうございました。またお会いできる日を楽しみにしています。
+        </div>
+      )}
       {/* ナビゲーション */}
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/70 border-b border-white/20">
         <div className="app-container flex items-center justify-between h-16">

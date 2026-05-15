@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { User, FixedCost } from '@/types'
-import { LogOut, Edit2, Target, Save, X, User as UserIcon, Briefcase, Calendar, Wallet, ChevronRight } from 'lucide-react'
+import { LogOut, Edit2, Target, Save, X, User as UserIcon, Briefcase, Calendar, Wallet, ChevronRight, Share2 } from 'lucide-react'
+import ShareCardModal from '@/components/profile/ShareCardModal'
 
 const AGE_GROUPS = [
   { value: 'teen', label: '10代' }, { value: '20s', label: '20代' },
@@ -28,13 +29,27 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [fixedCostsMonthly, setFixedCostsMonthly] = useState(0)
   const [fixedCostsCount, setFixedCostsCount] = useState(0)
+  const [completedTasksCount, setCompletedTasksCount] = useState(0)
+  const [shareCardOpen, setShareCardOpen] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
     loadProfile()
     loadFixedCosts()
+    loadCompletedCount()
   }, [])
+
+  const loadCompletedCount = async () => {
+    const { data: { user: authUser } } = await supabase.auth.getUser()
+    if (!authUser) return
+    const { count } = await supabase
+      .from('user_tasks')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', authUser.id)
+      .eq('status', 'completed')
+    setCompletedTasksCount(count ?? 0)
+  }
 
   const loadProfile = async () => {
     const { data: { user: authUser } } = await supabase.auth.getUser()
@@ -182,6 +197,13 @@ export default function ProfilePage() {
               <LogOut className="w-4 h-4" />
               ログアウト
             </button>
+
+            <Link
+              href="/profile/delete-account"
+              className="block text-center text-xs text-slate-400 hover:text-slate-600 py-2 transition-colors underline-offset-2 hover:underline"
+            >
+              アカウントを削除する
+            </Link>
           </div>
 
           {/* 右カラム：編集フォーム or 詳細情報 */}
@@ -367,6 +389,31 @@ export default function ProfilePage() {
                   </div>
                 </div>
 
+                {/* シェアカードCTA */}
+                <button
+                  onClick={() => setShareCardOpen(true)}
+                  className="w-full text-left rounded-[2.5rem] p-6 relative overflow-hidden group transition-all hover:shadow-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ec4899 100%)',
+                  }}
+                >
+                  <div className="absolute top-[-30%] right-[-20%] w-48 h-48 bg-white/20 rounded-full blur-3xl group-hover:scale-110 transition-transform" />
+                  <div className="absolute bottom-[-30%] left-[-10%] w-40 h-40 bg-white/10 rounded-full blur-3xl" />
+                  <div className="relative z-10 flex items-center gap-4 text-white">
+                    <div className="w-12 h-12 rounded-2xl bg-white/30 backdrop-blur-md border border-white/30 flex items-center justify-center text-2xl flex-shrink-0">
+                      🎉
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] font-bold tracking-[0.2em] opacity-90 mb-0.5">SNSでシェア</p>
+                      <p className="text-base font-black drop-shadow-sm">今月の自分カードを作る</p>
+                      <p className="text-xs opacity-90 mt-0.5 leading-relaxed">
+                        がんばった成果をInstagram映えするカードに🎨
+                      </p>
+                    </div>
+                    <Share2 className="w-5 h-5 text-white flex-shrink-0 group-hover:scale-110 transition-transform" />
+                  </div>
+                </button>
+
                 {/* 固定費カード */}
                 <Link
                   href="/profile/fixed-costs"
@@ -431,6 +478,13 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      <ShareCardModal
+        open={shareCardOpen}
+        onClose={() => setShareCardOpen(false)}
+        user={user}
+        completedTasksCount={completedTasksCount}
+      />
     </div>
   )
 }
