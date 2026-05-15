@@ -45,46 +45,77 @@ const QUICK_STARTS = [
 
 interface WelcomeModalProps {
   shouldClaim: boolean
+  userId: string
   nickname: string
 }
 
-export default function WelcomeModal({ shouldClaim, nickname }: WelcomeModalProps) {
+export default function WelcomeModal({ shouldClaim, userId, nickname }: WelcomeModalProps) {
   const router = useRouter()
   const supabase = useMemo(() => createClient(), [])
   const [open, setOpen] = useState(false)
-  const [pointsClaimed, setPointsClaimed] = useState<number | null>(null)
-  const [claiming, setClaiming] = useState(false)
+  const [pointsClaimed, setPointsClaimed] = useState(0)
   const [counter, setCounter] = useState(0)
 
   useEffect(() => {
-    if (!shouldClaim) return
+    if (!shouldClaim || !userId) return
     let cancelled = false
+    const localKey = `maneco_welcomed_${userId}`
 
-    const claim = async () => {
-      setClaiming(true)
-      const { data, error } = await supabase.rpc('claim_welcome_bonus')
+    const run = async () => {
+      // 1. Try the RPC (the proper, atomic path)
+      try {
+        const { data, error } = await supabase.rpc('claim_welcome_bonus')
+        if (cancelled) return
+
+        if (!error && typeof data === 'number') {
+          if (data > 0) {
+            setPointsClaimed(data)
+            setOpen(true)
+          }
+          // data === 0 means DB says already claimed — silently skip
+          return
+        }
+
+        if (error) {
+          console.error(
+            '[maneco] welcome bonus RPC failed. Did you run the SQL migration?\n' +
+              'Required: ALTER TABLE users ADD COLUMN welcomed_at TIMESTAMPTZ; + claim_welcome_bonus() function.\n' +
+              'See supabase-schema.sql for the exact SQL.',
+            error
+          )
+        }
+      } catch (err) {
+        if (!cancelled) console.error('[maneco] welcome bonus unexpected error:', err)
+      }
+
       if (cancelled) return
-      const awarded = !error && typeof data === 'number' ? data : 0
-      setPointsClaimed(awarded)
-      setClaiming(false)
-      if (awarded > 0) setOpen(true)
+
+      // 2. Fallback path: still show the celebration ONCE via localStorage
+      //    (no points are awarded, but the user gets the welcome experience)
+      if (typeof window === 'undefined') return
+      if (localStorage.getItem(localKey)) return
+      localStorage.setItem(localKey, new Date().toISOString())
+      setPointsClaimed(0)
+      setOpen(true)
     }
 
-    void claim()
+    void run()
     return () => {
       cancelled = true
     }
-  }, [shouldClaim, supabase])
+  }, [shouldClaim, userId, supabase])
 
   useEffect(() => {
-    if (!open || pointsClaimed === null) return
+    if (!open || pointsClaimed <= 0) {
+      setCounter(0)
+      return
+    }
     let frame = 0
-    const target = pointsClaimed
     const interval = setInterval(() => {
       frame += 1
-      const next = Math.min(target, frame)
+      const next = Math.min(pointsClaimed, frame)
       setCounter(next)
-      if (next >= target) clearInterval(interval)
+      if (next >= pointsClaimed) clearInterval(interval)
     }, 80)
     return () => clearInterval(interval)
   }, [open, pointsClaimed])
@@ -94,7 +125,7 @@ export default function WelcomeModal({ shouldClaim, nickname }: WelcomeModalProp
     router.refresh()
   }
 
-  if (!open || claiming) return null
+  if (!open) return null
 
   return (
     <div
@@ -169,23 +200,35 @@ export default function WelcomeModal({ shouldClaim, nickname }: WelcomeModalProp
           ここから一緒に、お金の不安をなくしていきましょう。
         </p>
 
-        {/* ポイント付与カード */}
-        <div className="relative bg-gradient-to-br from-amber-400 via-orange-400 to-pink-500 rounded-2xl p-5 mb-6 text-white overflow-hidden shadow-lg shadow-amber-200">
-          <div className="absolute top-[-30%] right-[-10%] w-32 h-32 bg-white/20 rounded-full blur-2xl" />
-          <div className="relative z-10 flex items-center gap-4">
-            <div className="text-4xl">🎁</div>
-            <div className="text-left flex-1">
-              <p className="text-[11px] font-bold opacity-90 tracking-wider mb-0.5">
-                登録お祝いプレゼント
-              </p>
-              <p className="text-3xl font-black tracking-tight leading-none">
-                +{counter}
-                <span className="text-base font-bold ml-1">pt</span>
-              </p>
-              <p className="text-[11px] opacity-90 mt-1">アカウントに付与しました</p>
+        {/* ポイント付与カード（pointsClaimed > 0のときだけ） */}
+        {pointsClaimed > 0 ? (
+          <div className="relative bg-gradient-to-br from-amber-400 via-orange-400 to-pink-500 rounded-2xl p-5 mb-6 text-white overflow-hidden shadow-lg shadow-amber-200">
+            <div className="absolute top-[-30%] right-[-10%] w-32 h-32 bg-white/20 rounded-full blur-2xl" />
+            <div className="relative z-10 flex items-center gap-4">
+              <div className="text-4xl">🎁</div>
+              <div className="text-left flex-1">
+                <p className="text-[11px] font-bold opacity-90 tracking-wider mb-0.5">
+                  登録お祝いプレゼント
+                </p>
+                <p className="text-3xl font-black tracking-tight leading-none">
+                  +{counter}
+                  <span className="text-base font-bold ml-1">pt</span>
+                </p>
+                <p className="text-[11px] opacity-90 mt-1">アカウントに付与しました</p>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="relative bg-gradient-to-br from-indigo-50 via-blue-50 to-violet-50 rounded-2xl p-5 mb-6 border border-indigo-100">
+            <div className="flex items-center gap-3">
+              <div className="text-3xl">✨</div>
+              <p className="text-sm text-slate-700 leading-relaxed text-left">
+                ここから一緒に、お金との<strong className="text-indigo-700">いい関係</strong>を築いていきましょう。
+                小さな成功体験を積み重ねるアプリです🐱
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* クイックスタート */}
         <p className="text-xs font-bold text-slate-500 tracking-wider mb-3">FIRST STEP</p>

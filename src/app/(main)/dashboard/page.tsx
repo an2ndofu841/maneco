@@ -57,7 +57,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen md:pb-12">
-      <WelcomeModal shouldClaim={shouldClaimWelcome} nickname={profile.nickname} />
+      <WelcomeModal shouldClaim={shouldClaimWelcome} userId={authUser.id} nickname={profile.nickname} />
       <div className="app-container pt-6 md:pt-12">
         {/* ヘッダー */}
         <div className="flex items-center justify-between mb-8">
