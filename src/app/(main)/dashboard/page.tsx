@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import CharacterCard from '@/components/dashboard/CharacterCard'
 import StatsGrid from '@/components/dashboard/StatsGrid'
 import ChatWidget from '@/components/chat/ChatWidget'
+import WelcomeModal from '@/components/dashboard/WelcomeModal'
 import Link from 'next/link'
 import { TrendingUp, ShoppingBag, Bell, ChevronRight, Settings } from 'lucide-react'
 import { User } from '@/types'
@@ -40,9 +41,12 @@ export default async function DashboardPage() {
     total_savings: 0,
     character_level: 1,
     character_exp: 0,
+    welcomed_at: null,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   }
+
+  const shouldClaimWelcome = !profile.welcomed_at
 
   const tips = [
     'コンビニコーヒーを週5日買うと月約2,000円。マイボトルに変えると年間24,000円の節約！',
@@ -53,6 +57,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen md:pb-12">
+      <WelcomeModal shouldClaim={shouldClaimWelcome} nickname={profile.nickname} />
       <div className="app-container pt-6 md:pt-12">
         {/* ヘッダー */}
         <div className="flex items-center justify-between mb-8">

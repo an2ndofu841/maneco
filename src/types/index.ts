@@ -11,6 +11,7 @@ export interface User {
   total_savings: number
   character_level: number
   character_exp: number
+  welcomed_at?: string | null
   created_at: string
   updated_at: string
 }

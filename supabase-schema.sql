@@ -267,6 +267,34 @@ CREATE POLICY "全ユーザーが記事を参照可" ON public.articles
   FOR SELECT USING (is_active = TRUE);
 
 -- ========================================
+-- ウェルカムボーナス（初回ダッシュボード訪問時）
+-- ========================================
+
+ALTER TABLE public.users ADD COLUMN IF NOT EXISTS welcomed_at TIMESTAMPTZ;
+
+CREATE OR REPLACE FUNCTION public.claim_welcome_bonus()
+RETURNS INTEGER AS $$
+DECLARE
+  v_user_id UUID := auth.uid();
+  v_updated_count INTEGER;
+BEGIN
+  IF v_user_id IS NULL THEN
+    RETURN 0;
+  END IF;
+
+  UPDATE public.users
+  SET welcomed_at = NOW(),
+      total_points = total_points + 1,
+      character_exp = character_exp + 1
+  WHERE id = v_user_id AND welcomed_at IS NULL;
+
+  GET DIAGNOSTICS v_updated_count = ROW_COUNT;
+
+  RETURN v_updated_count;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- ========================================
 -- User_Fixed_Costsテーブル（ユーザーの固定費）
 -- ========================================
 
